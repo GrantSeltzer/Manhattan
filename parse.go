@@ -13,9 +13,10 @@ func parseFlagOpt(action string, arguments string, config *types.Seccomp) {
 	var syscalls []string
 	if strings.Contains(arguments, ",") {
 		syscalls = strings.Split(arguments, ",")
-	}
-	if strings.Contains(arguments, "/") {
+	} else if strings.Contains(arguments, "/") {
 		syscalls = strings.Split(arguments, "/")
+	} else {
+		syscalls = append(syscalls, arguments)
 	}
 
 	correctedAction := parseAction(action)
