@@ -45,6 +45,7 @@ func main() {
 
 	// TODO:
 	// - Write SeccompProfile back to a file
+	// - Add feature to set default action
 	// - Allow user to enter in a custom location for the exported profile
 	//   otherwise place it in the same directory as default_seccomp_profile
 	// - Go over code to make sure all errors are properly checked
