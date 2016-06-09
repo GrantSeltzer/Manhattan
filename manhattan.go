@@ -50,11 +50,5 @@ func main() {
 	fullPath := parseLocation(*location, *name)
 
 	fmt.Println(fullPath, defaultAction)
-	// TODO:
-	// - Write SeccompProfile back to a file
-	// - Allow arguments to be added for system calls
-	// - Functionality to remove actions completely
-	// - Go over code to make sure all errors are properly checked
-	// - Write unit tests
 
 }
