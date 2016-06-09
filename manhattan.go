@@ -52,9 +52,8 @@ func main() {
 	fmt.Println(fullPath, defaultAction)
 	// TODO:
 	// - Write SeccompProfile back to a file
-	// - Add feature to set default action
-	// - Allow user to enter in a custom location for the exported profile
-	//   otherwise place it in the same directory as default_seccomp_profile
+	// - Allow arguments to be added for system calls
+	// - Functionality to remove actions completely
 	// - Go over code to make sure all errors are properly checked
 	// - Write unit tests
 
