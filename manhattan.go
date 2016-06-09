@@ -18,6 +18,7 @@ func main() {
 		fmt.Println("You can specify a configuration file with -location")
 		os.Exit(-1)
 	}
+	defer configFile.Close()
 
 	var SeccompProfile types.Seccomp
 
@@ -37,7 +38,7 @@ func main() {
 	location := flag.String("location", default_seccomp_profile,
 		"Set the location for the exported seccomp profile.")
 	name := flag.String("name", defaultTime(), "Set name of output file")
-
+	remove := flag.String("remove", "", "Remove a syscall ")
 	flag.Parse()
 
 	parseSysCallFlag("kill", *kill, &SeccompProfile)
