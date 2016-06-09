@@ -12,7 +12,6 @@ import (
 const default_seccomp_profile = "/etc/sysconfig/docker-seccomp-profile.json"
 
 func main() {
-
 	configFile, configError := os.Open(default_seccomp_profile)
 	if configError != nil {
 		fmt.Println("Error opening default configuration: ", default_seccomp_profile)
@@ -35,14 +34,21 @@ func main() {
 	trace := flag.String("trace", "", "Respond to system call with TRACE")
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
 
+	location := flag.String("location", default_seccomp_profile,
+		"Set the location for the exported seccomp profile.")
+	name := flag.String("name", defaultTime(), "Set name of output file")
+
 	flag.Parse()
 
-	parseFlagOpt("kill", *kill, &SeccompProfile)
-	parseFlagOpt("trap", *trap, &SeccompProfile)
-	parseFlagOpt("errno", *errno, &SeccompProfile)
-	parseFlagOpt("trace", *trace, &SeccompProfile)
-	parseFlagOpt("allow", *allow, &SeccompProfile)
+	parseSysCallFlag("kill", *kill, &SeccompProfile)
+	parseSysCallFlag("trap", *trap, &SeccompProfile)
+	parseSysCallFlag("errno", *errno, &SeccompProfile)
+	parseSysCallFlag("trace", *trace, &SeccompProfile)
+	parseSysCallFlag("allow", *allow, &SeccompProfile)
 
+	fullPath := parseLocation(*location, *name)
+
+	fmt.Println(fullPath)
 	// TODO:
 	// - Write SeccompProfile back to a file
 	// - Add feature to set default action

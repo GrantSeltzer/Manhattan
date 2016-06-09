@@ -8,7 +8,7 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-func parseFlagOpt(action string, arguments string, config *types.Seccomp) {
+func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 
 	var syscalls []string
 	if strings.Contains(arguments, ",") {
@@ -28,7 +28,6 @@ func parseFlagOpt(action string, arguments string, config *types.Seccomp) {
 			}
 		}
 	}
-
 	// Return some type of error?
 }
 
@@ -50,5 +49,8 @@ func parseAction(action string) types.Action {
 		os.Exit(-3)
 		return types.ActKill
 	}
+}
 
+func parseLocation(location, name string) string {
+	return strings.TrimSuffix(location, "/") + "/" + name
 }
