@@ -51,6 +51,10 @@ func parseAction(action string) types.Action {
 	}
 }
 
+func parseDefaultAction(action string, config *types.Seccomp) {
+	config.DefaultAction = parseAction(action)
+}
+
 func parseLocation(location, name string) string {
 	return strings.TrimSuffix(location, "/") + "/" + name
 }

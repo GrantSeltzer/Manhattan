@@ -33,7 +33,7 @@ func main() {
 	errno := flag.String("errno", "", "Respond to system call with ERRNO")
 	trace := flag.String("trace", "", "Respond to system call with TRACE")
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
-
+	defaultAction := flag.String("default", "SCMP_ACT_ERRNO", "Set the default action")
 	location := flag.String("location", default_seccomp_profile,
 		"Set the location for the exported seccomp profile.")
 	name := flag.String("name", defaultTime(), "Set name of output file")
@@ -46,9 +46,10 @@ func main() {
 	parseSysCallFlag("trace", *trace, &SeccompProfile)
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
 
+	parseDefaultAction(*defaultAction, &SeccompProfile)
 	fullPath := parseLocation(*location, *name)
 
-	fmt.Println(fullPath)
+	fmt.Println(fullPath, defaultAction)
 	// TODO:
 	// - Write SeccompProfile back to a file
 	// - Add feature to set default action
