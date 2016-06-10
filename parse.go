@@ -21,7 +21,6 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 
 	correctedAction := parseAction(action)
 
-	// TODO BUG: Functionality to add the syscall if it doesn't exist
 	var syscallExists bool = false
 	for _, syscall := range syscalls {
 		for _, syscallStruct := range config.Syscalls {
@@ -32,9 +31,10 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 		}
 		if syscallExists != true {
 			// Add new struct to config.Syscalls
-			newSyscallStruct := types.Syscall{Name: syscall, Action: correctedAction}
-			config.Syscalls = append(config.Syscalls, &newSyscallStruct)
-			// TODO Append newSyscallStruct to config... ^ that might not work
+			newSyscallStruct := &types.Syscall{
+				Name:   syscall,
+				Action: correctedAction}
+			config.Syscalls = append(config.Syscalls, newSyscallStruct)
 		}
 	}
 }
