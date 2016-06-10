@@ -30,8 +30,8 @@ func main() {
 	trace := flag.String("trace", "", "Respond to system call with TRACE")
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
 	//	remove := flag.String("remove", "", "Remove a syscall ")
-	// defaultAction := flag.String("default", "SCMP_ACT_ERRNO", "Set the default action")
-	location := flag.String("location", default_seccomp_profile,
+	defaultAction := flag.String("default", "errno", "Set the default action")
+	location := flag.String("location", userHomeDir(),
 		"Set the location for the exported seccomp profile.")
 	name := flag.String("name", parseTime(), "Set name of output file")
 	flag.Parse()
@@ -41,9 +41,9 @@ func main() {
 	parseSysCallFlag("errno", *errno, &SeccompProfile)
 	parseSysCallFlag("trace", *trace, &SeccompProfile)
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
-	//	parseDefaultAction(*defaultAction, &SeccompProfile)
+	parseDefaultAction(*defaultAction, &SeccompProfile)
 
-	b, marshallError := json.Marshal(SeccompProfile)
+	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
 	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
 
 	fullPath := parseLocation(*location, *name)
