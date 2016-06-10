@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/docker/engine-api/types"
 )
@@ -64,5 +65,10 @@ func parseDefaultAction(action string, config *types.Seccomp) {
 }
 
 func parseLocation(location, name string) string {
-	return strings.TrimSuffix(location, "/") + "/" + name
+	return strings.TrimSuffix(location, "/") + "/" + name + ".json"
+}
+
+//returns current time and date as a string without any whitespace
+func parseTime() string {
+	return strings.Replace(time.Now().String(), " ", "", -1)
 }

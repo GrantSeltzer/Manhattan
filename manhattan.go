@@ -13,32 +13,27 @@ const default_seccomp_profile = "/etc/sysconfig/docker-seccomp-profile.json"
 
 func main() {
 	configFile, configError := os.Open(default_seccomp_profile)
-	if configError != nil {
-		fmt.Println("Error opening default configuration: ", default_seccomp_profile)
-		fmt.Println("You can specify a configuration file with -location")
-		os.Exit(-1)
-	}
+	fatalErrorCheck(configError,
+		"Error opening default configuration. You can specify a custom default with the -location flag")
+
 	defer configFile.Close()
 
 	var SeccompProfile types.Seccomp
 
 	jsonParser := json.NewDecoder(configFile)
 	parseError := jsonParser.Decode(&SeccompProfile)
-	if parseError != nil {
-		fmt.Println("Error parsing configuration file")
-		os.Exit(-2)
-	}
+	fatalErrorCheck(parseError, "Error parsing Configuration File")
 
 	kill := flag.String("kill", "", "Respond to system call with KILL")
 	trap := flag.String("trap", "", "Respond to system call with TRAP")
 	errno := flag.String("errno", "", "Respond to system call with ERRNO")
 	trace := flag.String("trace", "", "Respond to system call with TRACE")
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
-	defaultAction := flag.String("default", "SCMP_ACT_ERRNO", "Set the default action")
+	//	remove := flag.String("remove", "", "Remove a syscall ")
+	// defaultAction := flag.String("default", "SCMP_ACT_ERRNO", "Set the default action")
 	location := flag.String("location", default_seccomp_profile,
 		"Set the location for the exported seccomp profile.")
-	name := flag.String("name", defaultTime(), "Set name of output file")
-	remove := flag.String("remove", "", "Remove a syscall ")
+	name := flag.String("name", parseTime(), "Set name of output file")
 	flag.Parse()
 
 	parseSysCallFlag("kill", *kill, &SeccompProfile)
@@ -46,10 +41,16 @@ func main() {
 	parseSysCallFlag("errno", *errno, &SeccompProfile)
 	parseSysCallFlag("trace", *trace, &SeccompProfile)
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
+	//	parseDefaultAction(*defaultAction, &SeccompProfile)
 
-	parseDefaultAction(*defaultAction, &SeccompProfile)
+	b, marshallError := json.Marshal(SeccompProfile)
+	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
+
 	fullPath := parseLocation(*location, *name)
-
-	fmt.Println(fullPath, defaultAction)
+	fmt.Println(string(b))
+	newConfigFile, newConfigError := os.Create(fullPath)
+	fatalErrorCheck(newConfigError, "Error creating config file")
+	_, writeError := newConfigFile.Write(b)
+	fatalErrorCheck(writeError, "Error writing config to file")
 
 }
