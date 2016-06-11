@@ -37,9 +37,7 @@ You can find a list of syscalls [here](http://man7.org/linux/man-pages/man2/sysc
 
 `manhattan -default kill`
 
-
-
- ### To do:
+##### To do
  - Functionality to remove actions completely
  - Allow arguments to be added for system calls
  - Fix bug where empty syscall is appended
