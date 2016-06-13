@@ -19,8 +19,6 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 	var syscallArgs []string
 	if strings.Contains(arguments, ",") {
 		syscallArgs = strings.Split(arguments, ",")
-	} else if strings.Contains(arguments, "/") {
-		syscallArgs = strings.Split(arguments, "/")
 	} else {
 		syscallArgs = append(syscallArgs, arguments)
 	}

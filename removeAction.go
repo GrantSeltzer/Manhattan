@@ -10,8 +10,6 @@ func removeAction(arguments string, config *types.Seccomp) {
 	var syscallsToRemove []string
 	if strings.Contains(arguments, ",") {
 		syscallsToRemove = strings.Split(arguments, ",")
-	} else if strings.Contains(arguments, "/") {
-		syscallsToRemove = strings.Split(arguments, "/")
 	} else {
 		syscallsToRemove = append(syscallsToRemove, arguments)
 	}
