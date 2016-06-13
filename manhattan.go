@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"os"
 
 	"github.com/docker/engine-api/types"
@@ -29,7 +28,7 @@ func main() {
 	errno := flag.String("errno", "", "Respond to system call with ERRNO")
 	trace := flag.String("trace", "", "Respond to system call with TRACE")
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
-	//	remove := flag.String("remove", "", "Remove a syscall ")
+	remove := flag.String("remove", "", "Remove a syscall ")
 	defaultAction := flag.String("default", "errno", "Set the default action")
 	location := flag.String("location", userHomeDir(),
 		"Set the location for the exported seccomp profile.")
@@ -42,12 +41,12 @@ func main() {
 	parseSysCallFlag("trace", *trace, &SeccompProfile)
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
 	parseDefaultAction(*defaultAction, &SeccompProfile)
-
+	removeAction(*remove, &SeccompProfile)
+	removeAction("", &SeccompProfile)
 	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
 	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
 
 	fullPath := parseLocation(*location, *name)
-	fmt.Println(string(b))
 	newConfigFile, newConfigError := os.Create(fullPath)
 	fatalErrorCheck(newConfigError, "Error creating config file")
 	_, writeError := newConfigFile.Write(b)

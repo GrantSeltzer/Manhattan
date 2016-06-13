@@ -13,7 +13,7 @@ Use any of the following flags to set actions for specified syscalls: (Specifyin
 
 Arguments consist of all lower case names of syscalls. Multiple ones can be passed by using a `,` or `/` separated list
 
-`-remove` COMING SOON
+`-remove` specifies syscalls that you would like to remove from the default configuration. Syscalls not specified will take on the default action.
 
 `-default` specifies the default action for syscalls not explicitly specified.
 
@@ -36,6 +36,8 @@ You can find a list of syscalls [here](http://man7.org/linux/man-pages/man2/sysc
 `manhattan -errno write,read -allow fstat`
 
 `manhattan -default kill`
+
+`manhattan -default kill -remove clone`
 
 
 
