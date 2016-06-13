@@ -41,9 +41,9 @@ You can find a list of syscalls [here](http://man7.org/linux/man-pages/man2/sysc
 
 
 
- #### TODO:
+##### To do
  - Allow arguments to be added for system calls
- 
+
  - Write unit tests
  - Need to check if syscall has specific arguments already when added
     - if It doesn't, the syscall action should be overwritten
