@@ -12,32 +12,46 @@ import (
 
 func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 
-	var syscalls []string
+	if arguments == "" {
+		return
+	}
+
+	var syscallArgs []string
 	if strings.Contains(arguments, ",") {
-		syscalls = strings.Split(arguments, ",")
+		syscallArgs = strings.Split(arguments, ",")
 	} else if strings.Contains(arguments, "/") {
-		syscalls = strings.Split(arguments, "/")
+		syscallArgs = strings.Split(arguments, "/")
 	} else {
-		syscalls = append(syscalls, arguments)
+		syscallArgs = append(syscallArgs, arguments)
 	}
 
 	correctedAction := parseAction(action)
 
 	var syscallExists bool = false
-	for _, syscall := range syscalls {
+	var syscallHasArguments bool = false
+
+	for _, syscallArg := range syscallArgs {
 		for _, syscallStruct := range config.Syscalls {
-			if syscallStruct.Name == syscall {
+			if syscallStruct.Name == syscallArg {
 				syscallExists = true
-				syscallStruct.Action = correctedAction
+				if syscallStruct.Args != nil {
+					syscallHasArguments = true
+				} else {
+					syscallStruct.Action = correctedAction
+				}
 			}
 		}
-		if syscallExists != true {
-			// Add new struct to config.Syscalls
+		if syscallExists == false || syscallHasArguments == true {
+			var emptyArgs []*types.Arg
+			emptyArgs = make([]*types.Arg, 0)
 			newSyscallStruct := &types.Syscall{
-				Name:   syscall,
-				Action: correctedAction}
+				Name:   syscallArg,
+				Action: correctedAction,
+				Args:   emptyArgs}
 			config.Syscalls = append(config.Syscalls, newSyscallStruct)
 		}
+		syscallExists = false
+		syscallHasArguments = false
 	}
 }
 

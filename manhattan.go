@@ -42,7 +42,7 @@ func main() {
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
 	parseDefaultAction(*defaultAction, &SeccompProfile)
 	removeAction(*remove, &SeccompProfile)
-	removeAction("", &SeccompProfile)
+
 	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
 	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
 
