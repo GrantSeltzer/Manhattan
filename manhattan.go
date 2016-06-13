@@ -8,10 +8,10 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-const default_seccomp_profile = "/etc/sysconfig/docker-seccomp-profile.json"
+const defaultSeccompProfile = "/etc/sysconfig/docker-seccomp-profile.json"
 
 func main() {
-	configFile, configError := os.Open(default_seccomp_profile)
+	configFile, configError := os.Open(defaultSeccompProfile)
 	fatalErrorCheck(configError,
 		"Error opening default configuration. You can specify a custom default with the -location flag")
 
