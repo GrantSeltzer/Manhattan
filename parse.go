@@ -16,6 +16,13 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 		return
 	}
 
+	var (
+		argsSpecified  bool
+		syscallArgName string
+		delimArgs      []string
+	)
+
+	/** Split up syscall specifications **/
 	var syscallArgs []string
 	if strings.Contains(arguments, ",") {
 		syscallArgs = strings.Split(arguments, ",")
@@ -25,17 +32,29 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 
 	correctedAction := parseAction(action)
 
-	var syscallExists bool = false
-	var syscallHasArguments bool = false
+	syscallExists := false
+	syscallHasArguments := false
 
+	/** For each syscall specified for a specific action**/
 	for _, syscallArg := range syscallArgs {
+
+		if strings.Contains(syscallArg, ":") {
+			argsSpecified = true
+			delimArgs = strings.Split(syscallArg, ":")
+			syscallArgName = delimArgs[0]
+		} else {
+			syscallArgName = syscallArg
+		}
+
+		/** Go through the syscalls in the existing config **/
 		for _, syscallStruct := range config.Syscalls {
-			if syscallStruct.Name == syscallArg {
+			if syscallStruct.Name == syscallArgName {
 				syscallExists = true
 				if syscallStruct.Args != nil {
 					syscallHasArguments = true
 				} else {
 					syscallStruct.Action = correctedAction
+					parseArguments(argsSpecified, delimArgs, syscallStruct)
 				}
 			}
 		}
@@ -43,13 +62,16 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 			var emptyArgs []*types.Arg
 			emptyArgs = make([]*types.Arg, 0)
 			newSyscallStruct := &types.Syscall{
-				Name:   syscallArg,
+				Name:   syscallArgName,
 				Action: correctedAction,
 				Args:   emptyArgs}
+			parseArguments(argsSpecified, delimArgs, newSyscallStruct)
 			config.Syscalls = append(config.Syscalls, newSyscallStruct)
+
 		}
 		syscallExists = false
 		syscallHasArguments = false
+		argsSpecified = false
 	}
 }
 

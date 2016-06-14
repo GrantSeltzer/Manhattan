@@ -8,7 +8,7 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-const defaultSeccompProfile = "/etc/sysconfig/docker-seccomp-profile.json"
+const defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
 
 func main() {
 	configFile, configError := os.Open(defaultSeccompProfile)
