@@ -17,7 +17,7 @@ Arguments consist of all lower case names of syscalls. Multiple ones can be pass
 
 You can also specify parameters for rules to apply to. The syntax is as follows:
 `manhattan -ACTION SYSCALL:INDEX:VALUE1:VALUE2:OP` OP must be any of the following:
-`NE`, `LT`, `LE`, `EQ`, `GE`, `GT`, or `ME`. For an explanation see
+`NE`, `LT`, `LE`, `EQ`, `GE`, `GT`, or `ME`. See:
 [here](https://github.com/docker/engine-api/blob/master/types/seccomp.go#L51-L57)
 
 `-remove` specifies syscalls that you would like to remove from the default configuration. Syscalls not specified will take on the default action.
