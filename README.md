@@ -46,7 +46,5 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 ##### To do
  - man page
  - -- for full word flags, - for single letter flags
- - input default profile option
- - if neither can be found, build one from scratch
  - makefile
  - Write unit tests
