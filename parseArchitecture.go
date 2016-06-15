@@ -29,7 +29,6 @@ func parseArchFlag(architectures string, config *types.Seccomp) {
 		if shouldAppend {
 			config.Architectures = append(config.Architectures, correctedArch)
 		}
-		shouldAppend = true
 	}
 }
 
