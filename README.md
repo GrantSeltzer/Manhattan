@@ -40,6 +40,8 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 
 `manhattan -trace clone:1:2:3:GT`
 
+`manhattan -arch mips,mips64,amd64`
+
 
 ##### To do
  - man page
