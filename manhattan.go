@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/docker/engine-api/types"
@@ -11,18 +12,8 @@ import (
 const defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
 
 func main() {
-	configFile, configError := os.Open(defaultSeccompProfile)
-	fatalErrorCheck(configError,
-		"Error opening default configuration. You can specify a custom default with the -location flag")
 
-	defer configFile.Close()
-
-	var SeccompProfile types.Seccomp
-
-	jsonParser := json.NewDecoder(configFile)
-	parseError := jsonParser.Decode(&SeccompProfile)
-	fatalErrorCheck(parseError, "Error parsing Configuration File")
-
+	input := flag.String("input", defaultSeccompProfile, "Specify location of base configuration file")
 	kill := flag.String("kill", "", "Respond to system call with KILL")
 	trap := flag.String("trap", "", "Respond to system call with TRAP")
 	errno := flag.String("errno", "", "Respond to system call with ERRNO")
@@ -30,12 +21,23 @@ func main() {
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
 	remove := flag.String("remove", "", "Remove a syscall ")
 	defaultAction := flag.String("default", "errno", "Set the default action")
-	arch := flag.String("arch", "", "Set supported architectures")
-	location := flag.String("location", userHomeDir(),
-		"Set the location for the exported seccomp profile.")
-	name := flag.String("name", parseTime(), "Set name of output file")
+	arch := flag.String("arch", defaultArchitecture(), "Set supported architectures")
+	name := flag.String("name", defaultFullPath(), "Set name of output file")
 
 	flag.Parse()
+
+	var SeccompProfile types.Seccomp
+
+	configFile, configError := os.Open(*input)
+	if configError != nil {
+		fmt.Println("[*] Could not open seccomp profile at", *input)
+		fmt.Println("[*] Creating new Profile")
+	} else {
+		jsonParser := json.NewDecoder(configFile)
+		parseError := jsonParser.Decode(&SeccompProfile)
+		fatalErrorCheck(parseError, "Error parsing Configuration File")
+	}
+	defer configFile.Close()
 
 	parseSysCallFlag("kill", *kill, &SeccompProfile)
 	parseSysCallFlag("trap", *trap, &SeccompProfile)
@@ -49,8 +51,7 @@ func main() {
 	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
 	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
 
-	fullPath := parseLocation(*location, *name)
-	newConfigFile, newConfigError := os.Create(fullPath)
+	newConfigFile, newConfigError := os.Create(*name)
 	fatalErrorCheck(newConfigError, "Error creating config file")
 	_, writeError := newConfigFile.Write(b)
 	fatalErrorCheck(writeError, "Error writing config to file")
