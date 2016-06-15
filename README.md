@@ -46,5 +46,4 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 ##### To do
  - man page
  - -- for full word flags, - for single letter flags
- - makefile
  - Write unit tests
