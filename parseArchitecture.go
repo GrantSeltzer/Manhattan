@@ -19,15 +19,17 @@ func parseArchFlag(architectures string, config *types.Seccomp) {
 
 	var correctedArch types.Arch
 	for _, arg := range architectureArgs {
+		correctedArch = parseArch(arg)
 		shouldAppend := true
 		for _, alreadySpecified := range config.Architectures {
-			correctedArch = parseArch(arg)
 			if correctedArch == alreadySpecified {
 				shouldAppend = false
 			}
 		}
 		if shouldAppend {
-			config.Architectures = append(config.Architectures, correctedArch)
+			var arches []types.Arch
+			arches = append(arches, correctedArch)
+			config.Architectures = arches
 		}
 	}
 }
@@ -67,8 +69,12 @@ func parseArch(arch string) types.Arch {
 	case "s390x":
 		return types.ArchS390X
 	default:
-		fmt.Println("Unrecognized architecture", arch)
+		fmt.Println("[*] Unrecognized architecture", arch)
 		os.Exit(-6)
 		return types.ArchMIPS
 	}
+}
+
+func defaultArchitecture() string {
+	return "hi :)"
 }
