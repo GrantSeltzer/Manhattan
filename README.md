@@ -5,7 +5,7 @@ A CLI tool for creating Docker seccomp json configurations. [Why?](https://githu
 
 ## Usage:
 
-Use any of the following flags to set actions for specified syscalls: (Specifying arguments coming soon!)
+Use any of the following flags to set actions for specified syscalls:
 
 `-kill`
 `-trap`
@@ -15,10 +15,11 @@ Use any of the following flags to set actions for specified syscalls: (Specifyin
 
 Arguments consist of all lower case names of syscalls. Multiple ones can be passed by using a `,` or `/` separated list
 
-You can also specify parameters for rules to apply to. The syntax is as follows:
+You can also specify parameters for rules to apply to. See:
+[here](https://github.com/docker/engine-api/blob/master/types/seccomp.go#L51-L57) The syntax is as follows:
+
 `manhattan -ACTION SYSCALL:INDEX:VALUE1:VALUE2:OP` OP must be any of the following:
-`NE`, `LT`, `LE`, `EQ`, `GE`, `GT`, or `ME`. See:
-[here](https://github.com/docker/engine-api/blob/master/types/seccomp.go#L51-L57)
+`NE`, `LT`, `LE`, `EQ`, `GE`, `GT`, or `ME`. 
 
 `-remove` specifies syscalls that you would like to remove from the default configuration. Syscalls not specified will take on the default action.
 
