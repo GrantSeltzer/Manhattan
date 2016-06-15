@@ -21,10 +21,12 @@ func main() {
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
 	remove := flag.String("remove", "", "Remove a syscall ")
 	defaultAction := flag.String("default", "errno", "Set the default action")
-	arch := flag.String("arch", defaultArchitecture(), "Set supported architectures")
+	arch := flag.String("arch", "amd64,x86,x32", "Set supported architectures")
 	name := flag.String("name", defaultFullPath(), "Set name of output file")
+	// version := flag.String("version", "nvm", "Print version")
 
 	flag.Parse()
+	// checkVersion(*version)
 
 	var SeccompProfile types.Seccomp
 

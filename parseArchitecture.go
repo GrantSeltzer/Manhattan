@@ -17,8 +17,10 @@ func parseArchFlag(architectures string, config *types.Seccomp) {
 		architectureArgs = append(architectureArgs, architectures)
 	}
 
+	var arches []types.Arch
 	var correctedArch types.Arch
 	for _, arg := range architectureArgs {
+		fmt.Println(arg)
 		correctedArch = parseArch(arg)
 		shouldAppend := true
 		for _, alreadySpecified := range config.Architectures {
@@ -27,7 +29,6 @@ func parseArchFlag(architectures string, config *types.Seccomp) {
 			}
 		}
 		if shouldAppend {
-			var arches []types.Arch
 			arches = append(arches, correctedArch)
 			config.Architectures = arches
 		}
@@ -73,8 +74,4 @@ func parseArch(arch string) types.Arch {
 		os.Exit(-6)
 		return types.ArchMIPS
 	}
-}
-
-func defaultArchitecture() string {
-	return "hi :)"
 }
