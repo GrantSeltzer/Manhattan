@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/user"
 	"strings"
-	"time"
 
 	"github.com/docker/engine-api/types"
 )
@@ -97,19 +95,4 @@ func parseAction(action string) types.Action {
 
 func parseDefaultAction(action string, config *types.Seccomp) {
 	config.DefaultAction = parseAction(action)
-}
-
-func parseLocation(location, name string) string {
-	return strings.TrimSuffix(location, "/") + "/" + name + ".json"
-}
-
-//returns current time and date as a string without any whitespace
-func parseTime() string {
-	return strings.Replace(time.Now().String(), " ", "", -1)
-}
-
-func userHomeDir() string {
-	usr, err := user.Current()
-	fatalErrorCheck(err, "Could not obtain users home directory. Try setting a custom output location with -location")
-	return usr.HomeDir
 }

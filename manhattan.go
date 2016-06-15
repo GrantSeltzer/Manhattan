@@ -30,9 +30,11 @@ func main() {
 	allow := flag.String("allow", "", "Respond to system call with ALLOW")
 	remove := flag.String("remove", "", "Remove a syscall ")
 	defaultAction := flag.String("default", "errno", "Set the default action")
+	arch := flag.String("arch", "", "Set supported architectures")
 	location := flag.String("location", userHomeDir(),
 		"Set the location for the exported seccomp profile.")
 	name := flag.String("name", parseTime(), "Set name of output file")
+
 	flag.Parse()
 
 	parseSysCallFlag("kill", *kill, &SeccompProfile)
@@ -41,6 +43,7 @@ func main() {
 	parseSysCallFlag("trace", *trace, &SeccompProfile)
 	parseSysCallFlag("allow", *allow, &SeccompProfile)
 	parseDefaultAction(*defaultAction, &SeccompProfile)
+	parseArchFlag(*arch, &SeccompProfile)
 	removeAction(*remove, &SeccompProfile)
 
 	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
