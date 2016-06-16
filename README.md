@@ -17,7 +17,7 @@ Use any of the following flags to set [actions](https://www.kernel.org/doc/Docum
 
 `--trace` or `-c`
 
-`--allow` or `a`
+`--allow` or `-a`
 
 You can also specify [parameters](https://github.com/docker/engine-api/blob/master/types/seccomp.go#L51-L57) for rules to apply to. The syntax is as follows:
 
