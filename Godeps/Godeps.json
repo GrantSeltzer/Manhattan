@@ -16,6 +16,11 @@
 			"ImportPath": "github.com/docker/go-units",
 			"Comment": "v0.3.0-2-g09dda9d",
 			"Rev": "09dda9d4b0d748c57c14048906d3d094a58ec0c9"
+		},
+		{
+			"ImportPath": "github.com/urfave/cli",
+			"Comment": "v1.17.0-57-gedb24d0",
+			"Rev": "edb24d02aa3cea2319c33f2836d4a5133907fe4c"
 		}
 	]
 }
