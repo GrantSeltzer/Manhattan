@@ -8,43 +8,43 @@ A CLI tool for creating Docker seccomp json configurations. [Why?](https://githu
 Arguments consist of all lower case names of [syscalls](http://man7.org/linux/man-pages/man2/syscalls.2.html). Multiple ones can be passed by using a `,` separated list.
 Use any of the following flags to set [actions](https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt) for specified syscalls:
 
-`-kill`
-`-trap`
-`-errno`
-`-trace`
-`-allow`
+`--kill` or `-k`
+
+
+`--trap` or `-p`
+
+`--errno` or `-e`
+
+`--trace` or `-c`
+
+`--allow` or `a`
 
 You can also specify [parameters](https://github.com/docker/engine-api/blob/master/types/seccomp.go#L51-L57) for rules to apply to. The syntax is as follows:
 
-`manhattan -ACTION SYSCALL:INDEX:VALUE1:VALUE2:OP` OP must be any of the following:
+`manhattan --ACTION SYSCALL:INDEX:VALUE1:VALUE2:OP` OP must be any of the following:
 `NE`, `LT`, `LE`, `EQ`, `GE`, `GT`, or `ME`.
 
-`-remove` specifies syscalls that you would like to remove from the default configuration. Syscalls not specified will take on the default action.
+`--remove` (`-r`) specifies syscalls that you would like to remove from the default configuration. Syscalls not specified will take on the default action.
 
-`-default` specifies the default action for syscalls not explicitly specified.
+`--default` (`-d`) specifies the default action for syscalls not explicitly specified.
 
-`-arch` specifies supported [architectures](https://github.com/opencontainers/runc/blob/master/libcontainer/seccomp/config.go#L27-L44).
+`--arch` (`-l`)specifies supported [architectures](https://github.com/opencontainers/runc/blob/master/libcontainer/seccomp/config.go#L27-L44).
 
-`-location` specifies the location of the ouput file. The default is the home directory.
-
-`-name` specifies the name of the output file. The default is the current timestamp.
+`--name` (`-n`) specifies the name of the output file. The default is the current timestamp in the current directory.
 
 ## Example usages:
-`manhattan -kill accept -location ~/jsonfiles -name SeccompConfig`
+`manhattan --kill accept --name ~/jsonfiles/SeccompConfig`
 
-`manhattan -kill=accept` , `manhattan -kill:accept` and `manattan -kill accept` are all equivalent
+`manhattan --kill=accept` , `manhattan --kill:accept` and `manattan --kill accept` are all equivalent
 
-`manhattan -errno write,read -allow fstat`
+`manhattan --errno write,read --allow fstat`
 
-`manhattan -default kill -remove clone`
+`manhattan --default kill --remove clone`
 
-`manhattan -trace clone:1:2:3:GT`
+`manhattan --trace clone:1:2:3:GT`
 
-`manhattan -arch mips,mips64,amd64`
+`manhattan --arch mips,mips64,amd64`
 
 
 ##### To do
- - man page
- - Bash completion
- - -- for full word flags, - for single letter flags
  - Write unit tests
