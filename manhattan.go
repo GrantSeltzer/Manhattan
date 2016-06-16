@@ -43,7 +43,7 @@ func main() {
 			Destination: &kill,
 		},
 		cli.StringFlag{
-			Name:        "trap, tp",
+			Name:        "trap, p",
 			Value:       "",
 			Usage:       "Respond to system call with TRAP",
 			Destination: &trap,
@@ -55,13 +55,13 @@ func main() {
 			Destination: &errno,
 		},
 		cli.StringFlag{
-			Name:        "trace, tc",
+			Name:        "trace, c",
 			Value:       "",
 			Usage:       "Respond to system call with TRACE",
 			Destination: &trace,
 		},
 		cli.StringFlag{
-			Name:        "allow, al",
+			Name:        "allow, a",
 			Value:       "",
 			Usage:       "Respond to system call with ALLOW",
 			Destination: &allow,
@@ -79,7 +79,7 @@ func main() {
 			Destination: &defaultAction,
 		},
 		cli.StringFlag{
-			Name:        "arch, ar",
+			Name:        "arch, l",
 			Value:       "amd64,x86,x32",
 			Usage:       "Set supported architectures",
 			Destination: &arch,
@@ -91,6 +91,8 @@ func main() {
 			Destination: &name,
 		},
 	}
+	app.Version = version
+	app.EnableBashCompletion = true
 	app.Action = func(c *cli.Context) error {
 		return nil
 	}
