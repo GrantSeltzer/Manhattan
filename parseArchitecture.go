@@ -20,7 +20,6 @@ func parseArchFlag(architectures string, config *types.Seccomp) {
 	var arches []types.Arch
 	var correctedArch types.Arch
 	for _, arg := range architectureArgs {
-		fmt.Println(arg)
 		correctedArch = parseArch(arg)
 		shouldAppend := true
 		for _, alreadySpecified := range config.Architectures {
