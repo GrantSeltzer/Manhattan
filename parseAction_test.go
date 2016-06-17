@@ -31,20 +31,20 @@ func TestParseSysCallFlag(t *testing.T) {
 
 	config := seccompProfileForTestingPurposes()
 
-	actions := []string{
-		"allow",
-		"errno",
-		"kill",
-		"trace",
-		"trap",
+	actions := map[string]types.Action{
+		"allow": types.ActAllow,
+		"errno": types.ActErrno,
+		"kill":  types.ActKill,
+		"trace": types.ActTrace,
+		"trap":  types.ActTrap,
 	}
 
-	for _, action := range actions {
-		parseSysCallFlag(action, "clone", &config)
+	for k, v := range actions {
+		parseSysCallFlag(k, "clone", &config)
 
 		for _, syscall := range config.Syscalls {
-			if syscall.Action != parseAction(action) {
-				t.Error("parseSysCallFlag return wrong output", syscall.Action)
+			if syscall.Action != v {
+				t.Error("parseSysCallFlag returned wrong output", syscall.Action, v)
 			}
 		}
 	}
@@ -54,8 +54,8 @@ func TestParseDefaultAction(t *testing.T) {
 	config := seccompProfileForTestingPurposes()
 
 	parseDefaultAction("kill", &config)
-	if config.DefaultAction != parseAction("kill") {
+	if config.DefaultAction != types.ActKill {
 		t.Error("parseDefaultAction returned wrong output. Expected:",
-			parseAction("kill"), "Got: ", config.DefaultAction)
+			types.ActKill, "Got: ", config.DefaultAction)
 	}
 }
