@@ -12,7 +12,6 @@ Use any of the following flags to set [actions](https://www.kernel.org/doc/Docum
 
 `--kill` or `-k`
 
-
 `--trap` or `-p`
 
 `--errno` or `-e`
