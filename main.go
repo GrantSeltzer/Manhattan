@@ -28,7 +28,6 @@ func main() {
 		arch          string
 		name          string
 	)
-	defaultFullPath := parse.DefaultFullPath()
 	app := cli.NewApp()
 	app.Name = "manhattan"
 	app.Usage = "Create Docker compliant seccomp json configurations"
