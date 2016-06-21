@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Manhattan/parse"
 	"testing"
 
 	"github.com/docker/engine-api/types"
@@ -21,7 +22,7 @@ func TestParseArguments(t *testing.T) {
 		"NE",
 	}
 
-	parseArguments(true, delimArgs, &syscall)
+	parse.Arguments(true, delimArgs, &syscall)
 
 	ArgStruct := types.Arg{
 		Index:    uint(1),

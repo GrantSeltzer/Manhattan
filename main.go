@@ -1,10 +1,12 @@
 package main
 
 import (
+	"Manhattan/parse"
 	"encoding/json"
 	"fmt"
 	"os"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
 	"github.com/urfave/cli"
 )
@@ -108,25 +110,34 @@ func main() {
 	} else {
 		jsonParser := json.NewDecoder(configFile)
 		parseError := jsonParser.Decode(&SeccompProfile)
-		fatalErrorCheck(parseError, "Error parsing Configuration File")
+		if parseError != nil {
+			log.Fatal("Error parsing Configuration File")
+		}
 	}
 	defer configFile.Close()
 
-	parseSysCallFlag("kill", kill, &SeccompProfile)
-	parseSysCallFlag("trap", trap, &SeccompProfile)
-	parseSysCallFlag("errno", errno, &SeccompProfile)
-	parseSysCallFlag("trace", trace, &SeccompProfile)
-	parseSysCallFlag("allow", allow, &SeccompProfile)
-	parseDefaultAction(defaultAction, &SeccompProfile)
-	parseArchFlag(arch, &SeccompProfile)
-	removeAction(remove, &SeccompProfile)
+	parse.SysCallFlag("kill", kill, &SeccompProfile)
+	parse.SysCallFlag("trap", trap, &SeccompProfile)
+	parse.SysCallFlag("errno", errno, &SeccompProfile)
+	parse.SysCallFlag("trace", trace, &SeccompProfile)
+	parse.SysCallFlag("allow", allow, &SeccompProfile)
+	parse.DefaultAction(defaultAction, &SeccompProfile)
+	parse.ArchFlag(arch, &SeccompProfile)
+	parse.RemoveAction(remove, &SeccompProfile)
 
 	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
-	fatalErrorCheck(marshallError, "Error creating Seccomp Profile")
+	if marshallError != nil {
+		log.Fatal("Error creating Seccomp Profile")
+	}
 
 	newConfigFile, newConfigError := os.Create(name)
-	fatalErrorCheck(newConfigError, "Error creating config file")
+	if newConfigError != nil {
+		log.Fatal("Error creating config file")
+	}
+
 	_, writeError := newConfigFile.Write(b)
-	fatalErrorCheck(writeError, "Error writing config to file")
+	if writeError != nil {
+		log.Fatal("Error writing config to file")
+	}
 
 }

@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -8,7 +8,9 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-func parseArchFlag(architectures string, config *types.Seccomp) {
+// ArchFlag takes the raw string passed with the --arch flag, parses it
+// and updates the Seccomp config accordingly
+func ArchFlag(architectures string, config *types.Seccomp) {
 	var architectureArgs []string
 
 	if strings.Contains(architectures, ",") {

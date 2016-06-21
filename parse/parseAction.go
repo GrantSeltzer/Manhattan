@@ -1,6 +1,7 @@
-package main
+package parse
 
 import (
+	"Manhattan/parse"
 	"fmt"
 	"os"
 	"strings"
@@ -8,7 +9,10 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
+//SysCallFlag takes the name of the action, the arguments (syscalls) that were
+//passed with it at the command line and a pointer to the config struct. It parses
+//the action and syscalls and updates the config accordingly
+func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 
 	if arguments == "" {
 		return
@@ -52,7 +56,9 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 					syscallHasArguments = true
 				} else {
 					syscallStruct.Action = correctedAction
-					parseArguments(argsSpecified, delimArgs, syscallStruct)
+					if argsSpecified {
+						parse.Arguments(delimArgs, syscallStruct)
+					}
 				}
 			}
 		}
@@ -63,7 +69,9 @@ func parseSysCallFlag(action string, arguments string, config *types.Seccomp) {
 				Name:   syscallArgName,
 				Action: correctedAction,
 				Args:   emptyArgs}
-			parseArguments(argsSpecified, delimArgs, newSyscallStruct)
+			if argsSpecified {
+				parse.Arguments(delimArgs, newSyscallStruct)
+			}
 			config.Syscalls = append(config.Syscalls, newSyscallStruct)
 
 		}
@@ -93,6 +101,7 @@ func parseAction(action string) types.Action {
 	}
 }
 
-func parseDefaultAction(action string, config *types.Seccomp) {
+//DefaultAction simply sets the default action of the seccomp configuration
+func DefaultAction(action string, config *types.Seccomp) {
 	config.DefaultAction = parseAction(action)
 }

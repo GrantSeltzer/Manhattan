@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"strings"
@@ -6,7 +6,9 @@ import (
 	"github.com/docker/engine-api/types"
 )
 
-func removeAction(arguments string, config *types.Seccomp) {
+// RemoveAction takes the argument string that was passed with the --remove flag,
+// parses it, and updates the Seccomp config accordingly
+func RemoveAction(arguments string, config *types.Seccomp) {
 	var syscallsToRemove []string
 	if strings.Contains(arguments, ",") {
 		syscallsToRemove = strings.Split(arguments, ",")

@@ -1,10 +1,12 @@
-package main
+package parse
 
 import (
 	"os"
 	"os/user"
 	"strings"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 func defaultFullPath() string {
@@ -21,12 +23,16 @@ func parseTime() string {
 
 func userHomeDir() string {
 	usr, err := user.Current()
-	fatalErrorCheck(err, "Could not obtain users home directory. Try setting a custom output location with -location")
+	if err != nil {
+		log.Fatal("Could not obtain users home directory. Try setting a custom output location with -location")
+	}
 	return usr.HomeDir
 }
 
 func pwd() string {
 	pwd, err := os.Getwd()
-	fatalErrorCheck(err, "Couldn't get current working directory")
+	if err != nil {
+		log.Fatal("Could not get current working directory")
+	}
 	return pwd
 }
