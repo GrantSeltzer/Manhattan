@@ -1,7 +1,13 @@
 # Manhattan
 
 
-A CLI tool for creating Docker seccomp json configurations. [Why?](https://github.com/docker/docker/blob/master/docs/security/seccomp.md)
+A CLI tool for creating OCI seccomp json configurations.
+
+#### [Why?](https://github.com/docker/docker/blob/master/docs/security/seccomp.md)
+These files are compliant with runc and docker. You can pass them at the command line
+for both tools to customize the settings for containers that you boot up.
+
+`docker run -it --security-opt seccomp=Manhattan.json`
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/grantseltzer/manhattan)](https://goreportcard.com/report/github.com/grantseltzer/manhattan)
 
