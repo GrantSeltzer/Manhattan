@@ -32,7 +32,11 @@ func TestParseArchFlag(t *testing.T) {
 	}
 
 	for k, v := range arches {
-		parse.ArchFlag(k, &config)
+		err := parse.ArchFlag(k, &config)
+		if err != nil {
+			t.Error("Parsing Arch Flag returned an error")
+		}
+
 		if config.Architectures[0] != v {
 			t.Error("Architectures mismatched", config.Architectures[0], v)
 		}

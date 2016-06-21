@@ -1,8 +1,9 @@
 package main
 
 import (
-	"Manhattan/parse"
 	"testing"
+
+	"github.com/grantseltzer/Manhattan/parse"
 
 	"github.com/docker/engine-api/types"
 )
@@ -22,7 +23,10 @@ func TestParseArguments(t *testing.T) {
 		"NE",
 	}
 
-	parse.Arguments(delimArgs, &syscall)
+	err := parse.Arguments(delimArgs, &syscall)
+	if err != nil {
+		t.Error("Parsing arugments returned an error ", err)
+	}
 
 	ArgStruct := types.Arg{
 		Index:    uint(1),

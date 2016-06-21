@@ -1,8 +1,9 @@
 package main
 
 import (
-	"Manhattan/parse"
 	"testing"
+
+	"github.com/grantseltzer/Manhattan/parse"
 
 	"github.com/docker/engine-api/types"
 )
@@ -41,11 +42,14 @@ func TestParseSysCallFlag(t *testing.T) {
 	}
 
 	for k, v := range actions {
-		parse.SysCallFlag(k, "clone", &config)
+		err := parse.SysCallFlag(k, "clone", &config)
+		if err != nil {
+			t.Error("Parsing syscall flag returned an error ", err)
+		}
 
 		for _, syscall := range config.Syscalls {
 			if syscall.Action != v {
-				t.Error("parseSysCallFlag returned wrong output", syscall.Action, v)
+				t.Error("parseSysCallFlag returned wrong output ", syscall.Action, v)
 			}
 		}
 	}
@@ -54,7 +58,10 @@ func TestParseSysCallFlag(t *testing.T) {
 func TestParseDefaultAction(t *testing.T) {
 	config := seccompProfileForTestingPurposes()
 
-	parse.DefaultAction("kill", &config)
+	err := parse.DefaultAction("kill", &config)
+	if err != nil {
+		t.Error("Parsing default action returned an error ", err)
+	}
 	if config.DefaultAction != types.ActKill {
 		t.Error("parseDefaultAction returned wrong output. Expected:",
 			types.ActKill, "Got: ", config.DefaultAction)

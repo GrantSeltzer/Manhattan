@@ -4,3 +4,5 @@ binary:
 	go build -ldflags "-X main.version=${VERSION}"
 clean:
 	rm -f Manhattan
+test:
+	cd tests && go test
