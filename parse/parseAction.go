@@ -11,15 +11,16 @@ import (
 //passed with it at the command line and a pointer to the config struct. It parses
 //the action and syscalls and updates the config accordingly
 func SysCallFlag(action string, arguments string, config *types.Seccomp) error {
-
 	if arguments == "" {
 		return nil
 	}
 
 	var (
-		argsSpecified  bool
-		syscallArgName string
-		delimArgs      []string
+		argsSpecified       bool
+		syscallArgName      string
+		delimArgs           []string
+		syscallExists       bool
+		syscallHasArguments bool
 	)
 
 	/** Split up syscall specifications **/
@@ -34,9 +35,6 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) error {
 	if err != nil {
 		return err
 	}
-
-	syscallExists := false
-	syscallHasArguments := false
 
 	/** For each syscall specified for a specific action**/
 	for _, syscallArg := range syscallArgs {

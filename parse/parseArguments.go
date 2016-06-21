@@ -30,15 +30,15 @@ func Arguments(delimArgs []string, syscallStruct *types.Syscall) error {
 		return err
 	}
 
-	ArgStruct := types.Arg{
+	argStruct := types.Arg{
 		Index:    uint(syscallIndex),
 		Value:    syscallValue,
 		ValueTwo: syscallValueTwo,
 		Op:       syscallOp,
 	}
-	var ArgSlice []*types.Arg
-	ArgSlice = append(ArgSlice, &ArgStruct)
-	syscallStruct.Args = ArgSlice
+	var argSlice []*types.Arg
+	argSlice = append(argSlice, &argStruct)
+	syscallStruct.Args = argSlice
 	return nil
 }
 

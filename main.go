@@ -7,15 +7,17 @@ import (
 
 	parse "github.com/grantseltzer/Manhattan/parse"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
 	"github.com/urfave/cli"
 )
 
-const defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
+const (
+	defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
+	version               = "0.0.1"
+)
 
 func main() {
-
 	var (
 		input         string
 		kill          string
@@ -103,41 +105,68 @@ func main() {
 
 	var SeccompProfile types.Seccomp
 
-	configFile, configError := os.Open(input)
-	if configError != nil {
+	config_file, err := os.Open(input)
+	if err != nil {
 		fmt.Println("[*] Could not open seccomp profile at", input)
 		fmt.Println("[*] Creating new Profile")
 	} else {
-		jsonParser := json.NewDecoder(configFile)
-		parseError := jsonParser.Decode(&SeccompProfile)
-		if parseError != nil {
-			log.Fatal("Error parsing Configuration File")
+		jsonParser := json.NewDecoder(config_file)
+		if jsonParser.Decode(&SeccompProfile) != nil {
+			logrus.Fatal("Error parsing Configuration File")
 		}
-	}
-	defer configFile.Close()
-
-	parse.SysCallFlag("kill", kill, &SeccompProfile)
-	parse.SysCallFlag("trap", trap, &SeccompProfile)
-	parse.SysCallFlag("errno", errno, &SeccompProfile)
-	parse.SysCallFlag("trace", trace, &SeccompProfile)
-	parse.SysCallFlag("allow", allow, &SeccompProfile)
-	parse.DefaultAction(defaultAction, &SeccompProfile)
-	parse.ArchFlag(arch, &SeccompProfile)
-	parse.RemoveAction(remove, &SeccompProfile)
-
-	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
-	if marshallError != nil {
-		log.Fatal("Error creating Seccomp Profile")
+		defer config_file.Close()
 	}
 
-	newConfigFile, newConfigError := os.Create(name)
-	if newConfigError != nil {
-		log.Fatal("Error creating config file")
+	if parse.SysCallFlag("kill", kill, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing kill argument")
+	}
+	if parse.SysCallFlag("trap", trap, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing trap argument")
+	}
+	if parse.SysCallFlag("errno", errno, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing errno argument")
+	}
+	if parse.SysCallFlag("trace", trace, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing trace argument")
+	}
+	if parse.SysCallFlag("allow", allow, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing allow argument")
+	}
+	if parse.DefaultAction(defaultAction, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing default action argument")
+	}
+	if parse.ArchFlag(arch, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing architecture agument")
+	}
+	if parse.RemoveAction(remove, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing remove action argument")
 	}
 
-	_, writeError := newConfigFile.Write(b)
-	if writeError != nil {
-		log.Fatal("Error writing config to file")
+	b, err := json.MarshalIndent(SeccompProfile, "", "    ")
+	if err != nil {
+		logrus.Fatal("Error creating Seccomp Profile")
 	}
 
+	newConfigFile, err := os.Create(name)
+	if err != nil {
+		logrus.Fatal("Error creating config file")
+	}
+
+	if _, err := newConfigFile.Write(b); err != nil {
+		logrus.Fatal("Error writing config to file")
+	}
+
+}
+
+func autocomplete(c *cli.Context) {
+	tasks := []string{"kill", "trap", "errno", "trace", "allow", "remove",
+		"default", "arch", "name"}
+
+	// This will complete if no args are passed
+	if c.NArg() > 0 {
+		return
+	}
+	for _, t := range tasks {
+		fmt.Println(t)
+	}
 }
