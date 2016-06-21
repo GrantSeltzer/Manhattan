@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"Manhattan/parse"
 	"fmt"
 	"os"
 	"strings"
@@ -57,7 +56,7 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 				} else {
 					syscallStruct.Action = correctedAction
 					if argsSpecified {
-						parse.Arguments(delimArgs, syscallStruct)
+						Arguments(delimArgs, syscallStruct)
 					}
 				}
 			}
@@ -70,7 +69,7 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 				Action: correctedAction,
 				Args:   emptyArgs}
 			if argsSpecified {
-				parse.Arguments(delimArgs, newSyscallStruct)
+				Arguments(delimArgs, newSyscallStruct)
 			}
 			config.Syscalls = append(config.Syscalls, newSyscallStruct)
 

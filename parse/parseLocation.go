@@ -9,7 +9,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func defaultFullPath() string {
+// DefaultFullPath returns the default full path/name for output configuration files
+func DefaultFullPath() string {
 	return (parseLocation(pwd(), parseTime()))
 }
 

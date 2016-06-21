@@ -1,10 +1,11 @@
 package main
 
 import (
-	"Manhattan/parse"
 	"encoding/json"
 	"fmt"
 	"os"
+
+	"github.com/grantseltzer/Manhattan/parse"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
@@ -88,7 +89,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:        "name, n",
-			Value:       defaultFullPath(),
+			Value:       parse.DefaultFullPath(),
 			Usage:       "Set name of output file",
 			Destination: &name,
 		},
