@@ -2,7 +2,6 @@ package parse
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/docker/engine-api/types"
@@ -10,11 +9,26 @@ import (
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func Arguments(delimArgs []string, syscallStruct *types.Syscall) {
-	syscallIndex, _ := strconv.ParseUint(delimArgs[1], 10, 0)
-	syscallValue, _ := strconv.ParseUint(delimArgs[2], 10, 64)
-	syscallValueTwo, _ := strconv.ParseUint(delimArgs[3], 10, 64)
-	syscallOp := parseOperator(delimArgs[4])
+func Arguments(delimArgs []string, syscallStruct *types.Syscall) error {
+	syscallIndex, err := strconv.ParseUint(delimArgs[1], 10, 0)
+	if err != nil {
+		return err
+	}
+
+	syscallValue, err := strconv.ParseUint(delimArgs[2], 10, 64)
+	if err != nil {
+		return err
+	}
+
+	syscallValueTwo, err := strconv.ParseUint(delimArgs[3], 10, 64)
+	if err != nil {
+		return err
+	}
+
+	syscallOp, err := parseOperator(delimArgs[4])
+	if err != nil {
+		return err
+	}
 
 	ArgStruct := types.Arg{
 		Index:    uint(syscallIndex),
@@ -25,27 +39,26 @@ func Arguments(delimArgs []string, syscallStruct *types.Syscall) {
 	var ArgSlice []*types.Arg
 	ArgSlice = append(ArgSlice, &ArgStruct)
 	syscallStruct.Args = ArgSlice
+	return nil
 }
 
-func parseOperator(operator string) types.Operator {
+func parseOperator(operator string) (types.Operator, error) {
 	switch operator {
 	case "NE":
-		return types.OpNotEqual
+		return types.OpNotEqual, nil
 	case "LT":
-		return types.OpLessThan
+		return types.OpLessThan, nil
 	case "LE":
-		return types.OpLessEqual
+		return types.OpLessEqual, nil
 	case "EQ":
-		return types.OpEqualTo
+		return types.OpEqualTo, nil
 	case "GE":
-		return types.OpGreaterEqual
+		return types.OpGreaterEqual, nil
 	case "GT":
-		return types.OpGreaterThan
+		return types.OpGreaterThan, nil
 	case "ME":
-		return types.OpMaskedEqual
+		return types.OpMaskedEqual, nil
 	default:
-		fmt.Println("Unrecognized operator", operator)
-		os.Exit(-3)
-		return types.OpNotEqual
+		return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
 	}
 }

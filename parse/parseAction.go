@@ -2,7 +2,6 @@ package parse
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/docker/engine-api/types"
@@ -11,10 +10,10 @@ import (
 //SysCallFlag takes the name of the action, the arguments (syscalls) that were
 //passed with it at the command line and a pointer to the config struct. It parses
 //the action and syscalls and updates the config accordingly
-func SysCallFlag(action string, arguments string, config *types.Seccomp) {
+func SysCallFlag(action string, arguments string, config *types.Seccomp) error {
 
 	if arguments == "" {
-		return
+		return nil
 	}
 
 	var (
@@ -31,7 +30,10 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 		syscallArgs = append(syscallArgs, arguments)
 	}
 
-	correctedAction := parseAction(action)
+	correctedAction, err := parseAction(action)
+	if err != nil {
+		return err
+	}
 
 	syscallExists := false
 	syscallHasArguments := false
@@ -61,7 +63,7 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 				}
 			}
 		}
-		if syscallExists == false || syscallHasArguments == true {
+		if !syscallExists || syscallHasArguments {
 			var emptyArgs []*types.Arg
 			emptyArgs = make([]*types.Arg, 0)
 			newSyscallStruct := &types.Syscall{
@@ -78,29 +80,34 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) {
 		syscallHasArguments = false
 		argsSpecified = false
 	}
+	return nil
 }
 
 // Take passed action, return the SCMP_ACT_<ACTION> version of it
-func parseAction(action string) types.Action {
+func parseAction(action string) (types.Action, error) {
 	switch action {
 	case "kill":
-		return types.ActKill
+		return types.ActKill, nil
 	case "trap":
-		return types.ActTrap
+		return types.ActTrap, nil
 	case "errno":
-		return types.ActErrno
+		return types.ActErrno, nil
 	case "trace":
-		return types.ActTrace
+		return types.ActTrace, nil
 	case "allow":
-		return types.ActAllow
+		return types.ActAllow, nil
 	default:
-		fmt.Println("Unrecognized action", action)
-		os.Exit(-3)
-		return types.ActKill
+		return types.ActKill, fmt.Errorf("Unrecognized action: %s", action)
+
 	}
 }
 
 //DefaultAction simply sets the default action of the seccomp configuration
-func DefaultAction(action string, config *types.Seccomp) {
-	config.DefaultAction = parseAction(action)
+func DefaultAction(action string, config *types.Seccomp) error {
+	defaultAction, err := parseAction(action)
+	if err != nil {
+		return err
+	}
+	config.DefaultAction = defaultAction
+	return nil
 }

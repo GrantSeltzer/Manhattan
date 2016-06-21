@@ -1,6 +1,7 @@
 package parse
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/docker/engine-api/types"
@@ -8,7 +9,12 @@ import (
 
 // RemoveAction takes the argument string that was passed with the --remove flag,
 // parses it, and updates the Seccomp config accordingly
-func RemoveAction(arguments string, config *types.Seccomp) {
+func RemoveAction(arguments string, config *types.Seccomp) error {
+
+	if config == nil {
+		return fmt.Errorf("Cannot remove action from nil Seccomp pointer")
+	}
+
 	var syscallsToRemove []string
 	if strings.Contains(arguments, ",") {
 		syscallsToRemove = strings.Split(arguments, ",")
@@ -23,4 +29,5 @@ func RemoveAction(arguments string, config *types.Seccomp) {
 			}
 		}
 	}
+	return nil
 }

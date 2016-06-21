@@ -1,12 +1,13 @@
 package parse
 
 import (
+	"log"
 	"os"
 	"os/user"
 	"strings"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 )
 
 // DefaultFullPath returns the default full path/name for output configuration files
@@ -33,7 +34,7 @@ func userHomeDir() string {
 func pwd() string {
 	pwd, err := os.Getwd()
 	if err != nil {
-		log.Fatal("Could not get current working directory")
+		logrus.Fatal("Could not get current working directory")
 	}
 	return pwd
 }
