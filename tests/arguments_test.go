@@ -22,7 +22,7 @@ func TestParseArguments(t *testing.T) {
 		"NE",
 	}
 
-	parse.Arguments(true, delimArgs, &syscall)
+	parse.Arguments(delimArgs, &syscall)
 
 	ArgStruct := types.Arg{
 		Index:    uint(1),

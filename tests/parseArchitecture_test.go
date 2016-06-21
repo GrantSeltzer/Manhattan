@@ -3,6 +3,8 @@ package main
 import (
 	"testing"
 
+	"github.com/grantseltzer/Manhattan/parse"
+
 	"github.com/docker/engine-api/types"
 )
 
@@ -30,7 +32,7 @@ func TestParseArchFlag(t *testing.T) {
 	}
 
 	for k, v := range arches {
-		parseArchFlag(k, &config)
+		parse.ArchFlag(k, &config)
 		if config.Architectures[0] != v {
 			t.Error("Architectures mismatched", config.Architectures[0], v)
 		}

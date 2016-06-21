@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Manhattan/parse"
 	"testing"
 
 	"github.com/docker/engine-api/types"
@@ -40,7 +41,7 @@ func TestParseSysCallFlag(t *testing.T) {
 	}
 
 	for k, v := range actions {
-		parseSysCallFlag(k, "clone", &config)
+		parse.SysCallFlag(k, "clone", &config)
 
 		for _, syscall := range config.Syscalls {
 			if syscall.Action != v {
@@ -53,7 +54,7 @@ func TestParseSysCallFlag(t *testing.T) {
 func TestParseDefaultAction(t *testing.T) {
 	config := seccompProfileForTestingPurposes()
 
-	parseDefaultAction("kill", &config)
+	parse.DefaultAction("kill", &config)
 	if config.DefaultAction != types.ActKill {
 		t.Error("parseDefaultAction returned wrong output. Expected:",
 			types.ActKill, "Got: ", config.DefaultAction)
