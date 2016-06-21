@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/grantseltzer/Manhattan/parse"
+	parse "github.com/grantseltzer/Manhattan/parse"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
@@ -28,7 +28,7 @@ func main() {
 		arch          string
 		name          string
 	)
-
+	defaultFullPath := parse.DefaultFullPath()
 	app := cli.NewApp()
 	app.Name = "manhattan"
 	app.Usage = "Create Docker compliant seccomp json configurations"
