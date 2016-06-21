@@ -5,17 +5,18 @@ import (
 	"fmt"
 	"os"
 
-	parse "github.com/grantseltzer/Manhattan/parse"
-
 	log "github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
+	parse "github.com/grantseltzer/Manhattan/parse"
 	"github.com/urfave/cli"
 )
 
-const defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
+const (
+	version               = "0.0.1"
+	defaultSeccompProfile = "/etc/sysconfig/manhattan.json"
+)
 
 func main() {
-
 	var (
 		input         string
 		kill          string
@@ -125,19 +126,30 @@ func main() {
 	parse.ArchFlag(arch, &SeccompProfile)
 	parse.RemoveAction(remove, &SeccompProfile)
 
-	b, marshallError := json.MarshalIndent(SeccompProfile, "", "    ")
-	if marshallError != nil {
+	b, err := json.MarshalIndent(SeccompProfile, "", "    ")
+	if err != nil {
 		log.Fatal("Error creating Seccomp Profile")
 	}
 
-	newConfigFile, newConfigError := os.Create(name)
-	if newConfigError != nil {
+	newConfigFile, err := os.Create(name)
+	if err != nil {
 		log.Fatal("Error creating config file")
 	}
 
-	_, writeError := newConfigFile.Write(b)
-	if writeError != nil {
+	if _, err := newConfigFile.Write(b); err != nil {
 		log.Fatal("Error writing config to file")
 	}
+}
 
+func autocomplete(c *cli.Context) {
+	tasks := []string{"kill", "trap", "errno", "trace", "allow", "remove",
+		"default", "arch", "name"}
+
+	// This will complete if no args are passed
+	if c.NArg() > 0 {
+		return
+	}
+	for _, t := range tasks {
+		fmt.Println(t)
+	}
 }

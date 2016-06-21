@@ -16,15 +16,15 @@ func Arguments(delimArgs []string, syscallStruct *types.Syscall) {
 	syscallValueTwo, _ := strconv.ParseUint(delimArgs[3], 10, 64)
 	syscallOp := parseOperator(delimArgs[4])
 
-	ArgStruct := types.Arg{
+	argStruct := types.Arg{
 		Index:    uint(syscallIndex),
 		Value:    syscallValue,
 		ValueTwo: syscallValueTwo,
 		Op:       syscallOp,
 	}
-	var ArgSlice []*types.Arg
-	ArgSlice = append(ArgSlice, &ArgStruct)
-	syscallStruct.Args = ArgSlice
+	argSlice := []*types.Arg{}
+	argSlice = append(argSlice, &argStruct)
+	syscallStruct.Args = argSlice
 }
 
 func parseOperator(operator string) types.Operator {
@@ -46,6 +46,5 @@ func parseOperator(operator string) types.Operator {
 	default:
 		fmt.Println("Unrecognized operator", operator)
 		os.Exit(-3)
-		return types.OpNotEqual
 	}
 }
