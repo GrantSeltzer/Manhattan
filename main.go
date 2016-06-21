@@ -47,7 +47,7 @@ func main() {
 			Destination: &kill,
 		},
 		cli.StringFlag{
-			Name:        "trap, p",
+			Name:        "trap",
 			Value:       "",
 			Usage:       "Respond to system call with TRAP",
 			Destination: &trap,
@@ -59,7 +59,7 @@ func main() {
 			Destination: &errno,
 		},
 		cli.StringFlag{
-			Name:        "trace, c",
+			Name:        "trace",
 			Value:       "",
 			Usage:       "Respond to system call with TRACE",
 			Destination: &trace,
@@ -83,7 +83,7 @@ func main() {
 			Destination: &defaultAction,
 		},
 		cli.StringFlag{
-			Name:        "arch, l",
+			Name:        "arch",
 			Value:       "amd64,x86,x32",
 			Usage:       "Set supported architectures",
 			Destination: &arch,

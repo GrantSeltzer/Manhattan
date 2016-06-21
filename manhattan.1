@@ -6,21 +6,26 @@
 .SH DESCRIPTION
     A command line tool for creating JSON configurations that can be used by
     any OCI standard compliant platform.
+.SH AUTHOR
+    Grant Seltzer, <gseltzer@redhat.com>
 .SH USAGE
     Arguments consist of all lower case names of syscalls. Multiple ones can be
     passed by using a , separated list. Use any of the following flags to set
     actions for specified syscalls:
 
+    --input, -i
+        Specifies location of base configuration file
+
     --kill, -k
         Set kill action for specified syscall(s)
 
-    --trap, -p
+    --trap
         Set trap action for specified syscall(s)
 
     --errno, -e
         Set errno action for specified syscall(s)
 
-    --trace, -c
+    --trace
         Set trace action for specified syscall(s)
 
     --allow, -a
@@ -38,7 +43,7 @@
     --default, -d
         Specifies the default action for syscalls not explicitly specified
 
-    --arch, -a
+    --architecture, --arch
         Specifies support architectures
 
     --name, -n
