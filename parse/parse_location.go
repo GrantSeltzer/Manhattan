@@ -16,7 +16,7 @@ func DefaultFullPath() string {
 }
 
 func parseLocation(location, name string) string {
-	return strings.TrimSuffix(location, "/") + "/" + name + ".json"
+	return strings.TrimSuffix(location, "/") + "/" + name
 }
 
 func parseTime() string {
