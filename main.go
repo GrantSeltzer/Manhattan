@@ -6,9 +6,9 @@ import (
 	"os"
 
 	seccomp "github.com/grantseltzer/Manhattan/ociseccompgen"
+	types "github.com/opencontainers/runc/libcontainer/configs"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/docker/engine-api/types"
 	"github.com/urfave/cli"
 )
 
