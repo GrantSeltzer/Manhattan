@@ -4,10 +4,13 @@
 A CLI tool for creating OCI seccomp json configurations.
 
 #### [Why?](https://github.com/docker/docker/blob/master/docs/security/seccomp.md)
-These files are compliant with runc and docker. You can pass them at the command line
-for both tools to customize the settings for containers that you boot up.
+Manhattan is a tool used to generate the seccomp json file used by OCI containers to control the system calls available to processes running within a container.  The generated json files can be used by any OCI compliant runtime like runc and docker. You can pass them at the command line to docker like the following:
 
 `docker run -it --security-opt seccomp=Manhattan.json`
+
+You can also specify the json file in the runc json specification like the following:
+
+TODO: `runc ...`
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/grantseltzer/manhattan)](https://goreportcard.com/report/github.com/grantseltzer/manhattan)
 
