@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"log"
 	"os"
 	"os/user"
 	"strings"
@@ -26,7 +25,7 @@ func parseTime() string {
 func userHomeDir() string {
 	usr, err := user.Current()
 	if err != nil {
-		log.Fatal("Could not obtain users home directory. Try setting a custom output location with -location")
+		logrus.Fatal("Could not obtain users home directory. Try setting a custom output location with -location")
 	}
 	return usr.HomeDir
 }
