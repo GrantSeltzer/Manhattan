@@ -105,16 +105,16 @@ func main() {
 
 	var SeccompProfile types.Seccomp
 
-	config_file, err := os.Open(input)
+	configFile, err := os.Open(input)
 	if err != nil {
 		fmt.Println("[*] Could not open seccomp profile at", input)
 		fmt.Println("[*] Creating new Profile")
 	} else {
-		jsonParser := json.NewDecoder(config_file)
+		jsonParser := json.NewDecoder(configFile)
 		if jsonParser.Decode(&SeccompProfile) != nil {
 			logrus.Fatal("Error parsing Configuration File")
 		}
-		defer config_file.Close()
+		defer configFile.Close()
 	}
 
 	if parse.SysCallFlag("kill", kill, &SeccompProfile) != nil {
