@@ -11,72 +11,34 @@ import (
 //passed with it at the command line and a pointer to the config struct. It parses
 //the action and syscalls and updates the config accordingly
 func SysCallFlag(action string, arguments string, config *types.Seccomp) error {
+
 	if arguments == "" {
 		return nil
 	}
 
-	var (
-		argsSpecified       bool
-		syscallArgName      string
-		delimArgs           []string
-		syscallExists       bool
-		syscallHasArguments bool
-	)
-
-	/** Split up syscall specifications **/
-	var syscallArgs []string
-	if strings.Contains(arguments, ",") {
-		syscallArgs = strings.Split(arguments, ",")
-	} else {
-		syscallArgs = append(syscallArgs, arguments)
-	}
+	syscallArgs := strings.Split(arguments, ",")
 
 	correctedAction, err := parseAction(action)
 	if err != nil {
 		return err
 	}
 
-	/** For each syscall specified for a specific action**/
 	for _, syscallArg := range syscallArgs {
-
-		if strings.Contains(syscallArg, ":") {
-			argsSpecified = true
-			delimArgs = strings.Split(syscallArg, ":")
-			syscallArgName = delimArgs[0]
-		} else {
-			syscallArgName = syscallArg
+		argSlice, err := splitArgumentsOut(syscallArg)
+		if err != nil {
+			return err
 		}
 
-		/** Go through the syscalls in the existing config **/
-		for _, syscallStruct := range config.Syscalls {
-			if syscallStruct.Name == syscallArgName {
-				syscallExists = true
-				if syscallStruct.Args != nil {
-					syscallHasArguments = true
-				} else {
-					syscallStruct.Action = correctedAction
-					if argsSpecified {
-						Arguments(delimArgs, syscallStruct)
-					}
-				}
-			}
-		}
-		if !syscallExists || syscallHasArguments {
-			var emptyArgs []*types.Arg
-			emptyArgs = make([]*types.Arg, 0)
-			newSyscallStruct := &types.Syscall{
-				Name:   syscallArgName,
-				Action: correctedAction,
-				Args:   emptyArgs}
-			if argsSpecified {
-				Arguments(delimArgs, newSyscallStruct)
-			}
-			config.Syscalls = append(config.Syscalls, newSyscallStruct)
+		newSyscall := newSyscallStruct(syscallArg, correctedAction, argSlice)
 
+		var sysCallAlreadySpecified bool
+		for _, syscall := range config.Syscalls {
+			sysCallAlreadySpecified = compareSyscalls(&newSyscall, syscall)
 		}
-		syscallExists = false
-		syscallHasArguments = false
-		argsSpecified = false
+
+		if !sysCallAlreadySpecified {
+			config.Syscalls = append(config.Syscalls, &newSyscall)
+		}
 	}
 	return nil
 }
@@ -108,4 +70,13 @@ func DefaultAction(action string, config *types.Seccomp) error {
 	}
 	config.DefaultAction = defaultAction
 	return nil
+}
+
+func newSyscallStruct(name string, action types.Action, args []*types.Arg) types.Syscall {
+	syscallStruct := types.Syscall{
+		Name:   name,
+		Action: action,
+		Args:   args,
+	}
+	return syscallStruct
 }

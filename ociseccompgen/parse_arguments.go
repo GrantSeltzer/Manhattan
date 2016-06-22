@@ -1,45 +1,58 @@
 package ociseccompgen
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func Arguments(delimArgs []string, syscallStruct *types.Syscall) error {
-	syscallIndex, err := strconv.ParseUint(delimArgs[1], 10, 0)
-	if err != nil {
-		return err
+func splitArgumentsOut(syscallArg string) ([]*types.Arg, error) {
+	delimArgs := strings.Split(syscallArg, ":")
+
+	nilArgSlice := []*types.Arg{}
+
+	if len(delimArgs) == 1 {
+		return nilArgSlice, nil
 	}
 
-	syscallValue, err := strconv.ParseUint(delimArgs[2], 10, 64)
-	if err != nil {
-		return err
+	if len(delimArgs) == 5 {
+		syscallIndex, err := strconv.ParseUint(delimArgs[1], 10, 0)
+		if err != nil {
+			return nilArgSlice, err
+		}
+
+		syscallValue, err := strconv.ParseUint(delimArgs[2], 10, 64)
+		if err != nil {
+			return nilArgSlice, err
+		}
+
+		syscallValueTwo, err := strconv.ParseUint(delimArgs[3], 10, 64)
+		if err != nil {
+			return nilArgSlice, err
+		}
+
+		syscallOp, err := parseOperator(delimArgs[4])
+		if err != nil {
+			return nilArgSlice, err
+		}
+
+		argStruct := &types.Arg{
+			Index:    uint(syscallIndex),
+			Value:    syscallValue,
+			ValueTwo: syscallValueTwo,
+			Op:       syscallOp,
+		}
+
+		argSlice := []*types.Arg{argStruct}
+		return argSlice, nil
 	}
 
-	syscallValueTwo, err := strconv.ParseUint(delimArgs[3], 10, 64)
-	if err != nil {
-		return err
-	}
-
-	syscallOp, err := parseOperator(delimArgs[4])
-	if err != nil {
-		return err
-	}
-
-	argStruct := types.Arg{
-		Index:    uint(syscallIndex),
-		Value:    syscallValue,
-		ValueTwo: syscallValueTwo,
-		Op:       syscallOp,
-	}
-	var argSlice []*types.Arg
-	argSlice = append(argSlice, &argStruct)
-	syscallStruct.Args = argSlice
-	return nil
+	return nilArgSlice, errors.New("Incorrect number of arguments passed with syscall")
 }
 
 func parseOperator(operator string) (types.Operator, error) {
