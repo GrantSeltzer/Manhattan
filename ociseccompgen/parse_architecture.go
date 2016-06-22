@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 // ArchFlag takes the raw string passed with the --arch flag, parses it
@@ -18,7 +18,7 @@ func ArchFlag(architectures string, config *types.Seccomp) error {
 		architectureArgs = append(architectureArgs, architectures)
 	}
 
-	var arches []types.Arch
+	var arches []string
 	for _, arg := range architectureArgs {
 		correctedArch, err := parseArch(arg)
 		if err != nil {
@@ -38,41 +38,41 @@ func ArchFlag(architectures string, config *types.Seccomp) error {
 	return nil
 }
 
-func parseArch(arch string) (types.Arch, error) {
+func parseArch(arch string) (string, error) {
 	switch arch {
 	case "x86":
-		return types.ArchX86, nil
+		return "SCMP_ARCH_X86", nil
 	case "amd64":
-		return types.ArchX86_64, nil
+		return "SCMP_ARCH_X86_64", nil
 	case "x32":
-		return types.ArchX32, nil
+		return "SCMP_ARCH_X32", nil
 	case "arm":
-		return types.ArchARM, nil
+		return "SCMP_ARC_ARM", nil
 	case "arm64":
-		return types.ArchAARCH64, nil
+		return "SCMP_ARC_AARCH64", nil
 	case "mips":
-		return types.ArchMIPS, nil
+		return "SCMP_ARC_MIPS", nil
 	case "mips64":
-		return types.ArchMIPS64, nil
+		return "SCMP_ARC_MIPS64", nil
 	case "mips64n32":
-		return types.ArchMIPS64N32, nil
+		return "SCMP_ARC_MIPS64N32", nil
 	case "mipsel":
-		return types.ArchMIPSEL, nil
+		return "SCMP_ARC_MIPSEL", nil
 	case "mipsel64":
-		return types.ArchMIPSEL64, nil
+		return "SCMP_ARC_MIPSEL64", nil
 	case "mipsel64n32":
-		return types.ArchMIPSEL64N32, nil
+		return "SCMP_ARC_MIPSEL64N32", nil
 	case "ppc":
-		return types.ArchPPC, nil
+		return "SCMP_ARC_PPC", nil
 	case "ppc64":
-		return types.ArchPPC64, nil
+		return "SCMP_ARC_PPC64", nil
 	case "ppc64le":
-		return types.ArchPPC64LE, nil
+		return "SCMP_ARC_PPC64LE", nil
 	case "s390":
-		return types.ArchS390, nil
+		return "SCMP_ARC_S390", nil
 	case "s390x":
-		return types.ArchS390X, nil
+		return "SCMP_ARC_S390X", nil
 	default:
-		return types.ArchMIPS, fmt.Errorf("Unrecognized architecutre: %s", arch)
+		return "SCMP_ARC_MIPS", fmt.Errorf("Unrecognized architecutre: %s", arch)
 	}
 }

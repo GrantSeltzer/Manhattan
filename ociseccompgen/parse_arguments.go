@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
@@ -45,20 +45,20 @@ func Arguments(delimArgs []string, syscallStruct *types.Syscall) error {
 func parseOperator(operator string) (types.Operator, error) {
 	switch operator {
 	case "NE":
-		return types.OpNotEqual, nil
+		return types.NotEqualTo, nil
 	case "LT":
-		return types.OpLessThan, nil
+		return types.LessThan, nil
 	case "LE":
-		return types.OpLessEqual, nil
+		return types.LessThanOrEqualTo, nil
 	case "EQ":
-		return types.OpEqualTo, nil
+		return types.EqualTo, nil
 	case "GE":
-		return types.OpGreaterEqual, nil
+		return types.GreaterThanOrEqualTo, nil
 	case "GT":
-		return types.OpGreaterThan, nil
+		return types.GreaterThan, nil
 	case "ME":
-		return types.OpMaskedEqual, nil
+		return types.MaskEqualTo, nil
 	default:
-		return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
+		return types.NotEqualTo, fmt.Errorf("Unrecognized operator: %s", operator)
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 // RemoveAction takes the argument string that was passed with the --remove flag,

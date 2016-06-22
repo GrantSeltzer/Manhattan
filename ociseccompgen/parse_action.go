@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 //SysCallFlag takes the name of the action, the arguments (syscalls) that were
@@ -85,17 +85,17 @@ func SysCallFlag(action string, arguments string, config *types.Seccomp) error {
 func parseAction(action string) (types.Action, error) {
 	switch action {
 	case "kill":
-		return types.ActKill, nil
+		return types.Kill, nil
 	case "trap":
-		return types.ActTrap, nil
+		return types.Trap, nil
 	case "errno":
-		return types.ActErrno, nil
+		return types.Errno, nil
 	case "trace":
-		return types.ActTrace, nil
+		return types.Trace, nil
 	case "allow":
-		return types.ActAllow, nil
+		return types.Allow, nil
 	default:
-		return types.ActKill, fmt.Errorf("Unrecognized action: %s", action)
+		return types.Kill, fmt.Errorf("Unrecognized action: %s", action)
 
 	}
 }
