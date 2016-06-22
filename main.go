@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	parse "github.com/grantseltzer/Manhattan/parse"
+	seccomp "github.com/grantseltzer/Manhattan/ociseccompgen"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/docker/engine-api/types"
@@ -90,7 +90,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:        "name, n",
-			Value:       parse.DefaultFullPath(),
+			Value:       seccomp.DefaultFullPath(),
 			Usage:       "Set name of output file",
 			Destination: &name,
 		},
@@ -117,28 +117,28 @@ func main() {
 		defer configFile.Close()
 	}
 
-	if parse.SysCallFlag("kill", kill, &SeccompProfile) != nil {
+	if seccomp.SysCallFlag("kill", kill, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing kill argument")
 	}
-	if parse.SysCallFlag("trap", trap, &SeccompProfile) != nil {
+	if seccomp.SysCallFlag("trap", trap, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing trap argument")
 	}
-	if parse.SysCallFlag("errno", errno, &SeccompProfile) != nil {
+	if seccomp.SysCallFlag("errno", errno, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing errno argument")
 	}
-	if parse.SysCallFlag("trace", trace, &SeccompProfile) != nil {
+	if seccomp.SysCallFlag("trace", trace, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing trace argument")
 	}
-	if parse.SysCallFlag("allow", allow, &SeccompProfile) != nil {
+	if seccomp.SysCallFlag("allow", allow, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing allow argument")
 	}
-	if parse.DefaultAction(defaultAction, &SeccompProfile) != nil {
+	if seccomp.DefaultAction(defaultAction, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing default action argument")
 	}
-	if parse.ArchFlag(arch, &SeccompProfile) != nil {
+	if seccomp.ArchFlag(arch, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing architecture agument")
 	}
-	if parse.RemoveAction(remove, &SeccompProfile) != nil {
+	if seccomp.RemoveAction(remove, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing remove action argument")
 	}
 
