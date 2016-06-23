@@ -24,12 +24,13 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 	}
 
 	for _, syscallArg := range syscallArgs {
-		argSlice, err := parseArguments(syscallArg)
+		delimArgs := strings.Split(syscallArg, ":")
+		argSlice, err := parseArguments(delimArgs)
 		if err != nil {
 			return err
 		}
 
-		newSyscall := newSyscallStruct(syscallArg, correctedAction, argSlice)
+		newSyscall := newSyscallStruct(delimArgs[0], correctedAction, argSlice)
 
 		var sysCallAlreadySpecified bool
 		for _, syscall := range config.Syscalls {

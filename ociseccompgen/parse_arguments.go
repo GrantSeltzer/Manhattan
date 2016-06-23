@@ -4,15 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"strings"
 
 	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func parseArguments(syscallArg string) ([]*types.Arg, error) {
-	delimArgs := strings.Split(syscallArg, ":")
+func parseArguments(delimArgs []string) ([]*types.Arg, error) {
 
 	nilArgSlice := []*types.Arg{}
 

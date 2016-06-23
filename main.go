@@ -117,25 +117,25 @@ func main() {
 		defer configFile.Close()
 	}
 
-	if seccomp.SysCallFlag("kill", kill, &SeccompProfile) != nil {
+	if seccomp.ParseSyscallFlag("kill", kill, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing kill argument")
 	}
-	if seccomp.SysCallFlag("trap", trap, &SeccompProfile) != nil {
+	if seccomp.ParseSyscallFlag("trap", trap, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing trap argument")
 	}
-	if seccomp.SysCallFlag("errno", errno, &SeccompProfile) != nil {
+	if seccomp.ParseSyscallFlag("errno", errno, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing errno argument")
 	}
-	if seccomp.SysCallFlag("trace", trace, &SeccompProfile) != nil {
+	if seccomp.ParseSyscallFlag("trace", trace, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing trace argument")
 	}
-	if seccomp.SysCallFlag("allow", allow, &SeccompProfile) != nil {
+	if seccomp.ParseSyscallFlag("allow", allow, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing allow argument")
 	}
 	if seccomp.DefaultAction(defaultAction, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing default action argument")
 	}
-	if seccomp.ArchFlag(arch, &SeccompProfile) != nil {
+	if seccomp.ParseArchitectureFlag(arch, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing architecture agument")
 	}
 	if seccomp.RemoveAction(remove, &SeccompProfile) != nil {
