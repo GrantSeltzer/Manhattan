@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
 	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
@@ -21,6 +22,11 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 	correctedAction, err := parseAction(action)
 	if err != nil {
 		return err
+	}
+
+	if correctedAction == config.DefaultAction {
+		logrus.Info("Action is already set as default")
+		return nil
 	}
 
 	for _, syscallArg := range syscallArgs {
