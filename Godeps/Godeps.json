@@ -1,21 +1,20 @@
 {
 	"ImportPath": "Manhattan",
-	"GoVersion": "go1.6",
+	"GoVersion": "go1.5.4",
 	"Deps": [
 		{
-			"ImportPath": "github.com/docker/engine-api/types",
-			"Comment": "v0.3.1-155-g739ad16",
-			"Rev": "739ad1671be872943fadf936120ccfe9ccdde23a"
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.10.0-19-gf3cfb45",
+			"Rev": "f3cfb454f4c209e6668c95216c4744b8fddb2356"
 		},
 		{
-			"ImportPath": "github.com/docker/go-connections/nat",
-			"Comment": "v0.2.0-6-gc7838b2",
-			"Rev": "c7838b258fbfa3fe88eecfb2a0e08ea0dbd6a646"
+			"ImportPath": "github.com/grantseltzer/Manhattan/ociseccompgen",
+			"Rev": "d736f379a225f8038937abb5781cfdadac7e854d"
 		},
 		{
-			"ImportPath": "github.com/docker/go-units",
-			"Comment": "v0.3.0-2-g09dda9d",
-			"Rev": "09dda9d4b0d748c57c14048906d3d094a58ec0c9"
+			"ImportPath": "github.com/opencontainers/runc/libcontainer/configs",
+			"Comment": "v0.1.1-160-g4450f7c",
+			"Rev": "4450f7c8dea183407c91c35b19051eea22dc5965"
 		},
 		{
 			"ImportPath": "github.com/urfave/cli",
