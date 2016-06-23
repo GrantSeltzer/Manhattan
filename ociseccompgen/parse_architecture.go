@@ -10,6 +10,7 @@ import (
 // ParseArchitectureFlag takes the raw string passed with the --arch flag, parses it
 // and updates the Seccomp config accordingly
 func ParseArchitectureFlag(architectures string, config *types.Seccomp) error {
+
 	var architectureArgs []string
 
 	if strings.Contains(architectures, ",") {

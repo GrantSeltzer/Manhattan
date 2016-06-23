@@ -7,9 +7,9 @@ import (
 	types "github.com/opencontainers/runc/libcontainer/configs"
 )
 
-//ParseSyscallFlag takes the name of the action, the arguments (syscalls) that were
-//passed with it at the command line and a pointer to the config struct. It parses
-//the action and syscalls and updates the config accordingly
+// ParseSyscallFlag takes the name of the action, the arguments (syscalls) that were
+// passed with it at the command line and a pointer to the config struct. It parses
+// the action and syscalls and updates the config accordingly
 func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) error {
 
 	if arguments == "" {
