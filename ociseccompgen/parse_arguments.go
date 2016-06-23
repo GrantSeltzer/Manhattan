@@ -11,7 +11,7 @@ import (
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func splitArgumentsOut(syscallArg string) ([]*types.Arg, error) {
+func parseArguments(syscallArg string) ([]*types.Arg, error) {
 	delimArgs := strings.Split(syscallArg, ":")
 
 	nilArgSlice := []*types.Arg{}
