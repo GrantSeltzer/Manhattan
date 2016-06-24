@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/Sirupsen/logrus"
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 // ParseSyscallFlag takes the name of the action, the arguments (syscalls) that were
@@ -40,11 +40,11 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 
 		var sysCallAlreadySpecified bool
 		for _, syscall := range config.Syscalls {
-			sysCallAlreadySpecified = compareSyscalls(&newSyscall, syscall)
+			sysCallAlreadySpecified = compareSyscalls(&newSyscall, &syscall)
 		}
 
 		if !sysCallAlreadySpecified {
-			config.Syscalls = append(config.Syscalls, &newSyscall)
+			config.Syscalls = append(config.Syscalls, newSyscall)
 		}
 	}
 	return nil
@@ -54,17 +54,17 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 func parseAction(action string) (types.Action, error) {
 	switch action {
 	case "kill":
-		return types.Kill, nil
+		return types.ActKill, nil
 	case "trap":
-		return types.Trap, nil
+		return types.ActTrap, nil
 	case "errno":
-		return types.Errno, nil
+		return types.ActErrno, nil
 	case "trace":
-		return types.Trace, nil
+		return types.ActTrace, nil
 	case "allow":
-		return types.Allow, nil
+		return types.ActAllow, nil
 	default:
-		return types.Kill, fmt.Errorf("Unrecognized action: %s", action)
+		return types.ActKill, fmt.Errorf("Unrecognized action: %s", action)
 
 	}
 }
@@ -79,7 +79,7 @@ func DefaultAction(action string, config *types.Seccomp) error {
 	return nil
 }
 
-func newSyscallStruct(name string, action types.Action, args []*types.Arg) types.Syscall {
+func newSyscallStruct(name string, action types.Action, args []types.Arg) types.Syscall {
 	syscallStruct := types.Syscall{
 		Name:   name,
 		Action: action,

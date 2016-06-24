@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strconv"
 
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func parseArguments(delimArgs []string) ([]*types.Arg, error) {
+func parseArguments(delimArgs []string) ([]types.Arg, error) {
 
-	nilArgSlice := []*types.Arg{}
+	nilArgSlice := []types.Arg{}
 
 	if len(delimArgs) == 1 {
 		return nilArgSlice, nil
@@ -39,14 +39,14 @@ func parseArguments(delimArgs []string) ([]*types.Arg, error) {
 			return nilArgSlice, err
 		}
 
-		argStruct := &types.Arg{
+		argStruct := types.Arg{
 			Index:    uint(syscallIndex),
 			Value:    syscallValue,
 			ValueTwo: syscallValueTwo,
 			Op:       syscallOp,
 		}
 
-		argSlice := []*types.Arg{argStruct}
+		argSlice := []types.Arg{argStruct}
 		return argSlice, nil
 	}
 
@@ -56,20 +56,20 @@ func parseArguments(delimArgs []string) ([]*types.Arg, error) {
 func parseOperator(operator string) (types.Operator, error) {
 	switch operator {
 	case "NE":
-		return types.NotEqualTo, nil
+		return types.OpNotEqual, nil
 	case "LT":
-		return types.LessThan, nil
+		return types.OpLessThan, nil
 	case "LE":
-		return types.LessThanOrEqualTo, nil
+		return types.OpLessEqual, nil
 	case "EQ":
-		return types.EqualTo, nil
+		return types.OpEqualTo, nil
 	case "GE":
-		return types.GreaterThanOrEqualTo, nil
+		return types.OpGreaterEqual, nil
 	case "GT":
-		return types.GreaterThan, nil
+		return types.OpGreaterThan, nil
 	case "ME":
-		return types.MaskEqualTo, nil
+		return types.OpMaskedEqual, nil
 	default:
-		return types.NotEqualTo, fmt.Errorf("Unrecognized operator: %s", operator)
+		return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
 	}
 }

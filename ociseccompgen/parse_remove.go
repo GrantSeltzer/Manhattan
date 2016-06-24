@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 // RemoveAction takes the argument string that was passed with the --remove flag,

@@ -3,7 +3,7 @@ package ociseccompgen
 import (
 	"reflect"
 
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func compareSyscalls(config1, config2 *types.Syscall) bool {

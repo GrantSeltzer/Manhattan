@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 // ParseArchitectureFlag takes the raw string passed with the --arch flag, parses it
@@ -19,7 +19,7 @@ func ParseArchitectureFlag(architectures string, config *types.Seccomp) error {
 		architectureArgs = append(architectureArgs, architectures)
 	}
 
-	var arches []string
+	var arches []types.Arch
 	for _, arg := range architectureArgs {
 		correctedArch, err := parseArch(arg)
 		if err != nil {
@@ -39,41 +39,41 @@ func ParseArchitectureFlag(architectures string, config *types.Seccomp) error {
 	return nil
 }
 
-func parseArch(arch string) (string, error) {
+func parseArch(arch string) (types.Arch, error) {
 	switch arch {
 	case "x86":
-		return "SCMP_ARCH_X86", nil
+		return types.ArchX86, nil
 	case "amd64":
-		return "SCMP_ARCH_X86_64", nil
+		return types.ArchX86_64, nil
 	case "x32":
-		return "SCMP_ARCH_X32", nil
+		return types.ArchX32, nil
 	case "arm":
-		return "SCMP_ARC_ARM", nil
+		return types.ArchARM, nil
 	case "arm64":
-		return "SCMP_ARC_AARCH64", nil
+		return types.ArchAARCH64, nil
 	case "mips":
-		return "SCMP_ARC_MIPS", nil
+		return types.ArchMIPS, nil
 	case "mips64":
-		return "SCMP_ARC_MIPS64", nil
+		return types.ArchMIPS64, nil
 	case "mips64n32":
-		return "SCMP_ARC_MIPS64N32", nil
+		return types.ArchMIPS64N32, nil
 	case "mipsel":
-		return "SCMP_ARC_MIPSEL", nil
+		return types.ArchMIPSEL, nil
 	case "mipsel64":
-		return "SCMP_ARC_MIPSEL64", nil
+		return types.ArchMIPSEL64, nil
 	case "mipsel64n32":
-		return "SCMP_ARC_MIPSEL64N32", nil
+		return types.ArchMIPSEL64N32, nil
 	case "ppc":
-		return "SCMP_ARC_PPC", nil
+		return types.ArchPPC, nil
 	case "ppc64":
-		return "SCMP_ARC_PPC64", nil
+		return types.ArchPPC64, nil
 	case "ppc64le":
-		return "SCMP_ARC_PPC64LE", nil
+		return types.ArchPPC64LE, nil
 	case "s390":
-		return "SCMP_ARC_S390", nil
+		return types.ArchS390, nil
 	case "s390x":
-		return "SCMP_ARC_S390X", nil
+		return types.ArchS390X, nil
 	default:
-		return "SCMP_ARC_MIPS", fmt.Errorf("Unrecognized architecutre: %s", arch)
+		return types.ArchMIPS, fmt.Errorf("Unrecognized architecutre: %s", arch)
 	}
 }

@@ -6,7 +6,7 @@ import (
 	"os"
 
 	seccomp "github.com/grantseltzer/Manhattan/ociseccompgen"
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/urfave/cli"
@@ -32,7 +32,7 @@ func main() {
 	)
 	app := cli.NewApp()
 	app.Name = "manhattan"
-	app.Usage = "Create Docker compliant seccomp json configurations"
+	app.Usage = "Create seccomp json configurations for use with OCI or Docker"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:        "input, i",
@@ -117,6 +117,9 @@ func main() {
 		defer configFile.Close()
 	}
 
+	if seccomp.DefaultAction(defaultAction, &SeccompProfile) != nil {
+		logrus.Fatal("Error parsing default action argument")
+	}
 	if seccomp.ParseSyscallFlag("kill", kill, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing kill argument")
 	}
@@ -131,9 +134,6 @@ func main() {
 	}
 	if seccomp.ParseSyscallFlag("allow", allow, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing allow argument")
-	}
-	if seccomp.DefaultAction(defaultAction, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing default action argument")
 	}
 	if seccomp.ParseArchitectureFlag(arch, &SeccompProfile) != nil {
 		logrus.Fatal("Error parsing architecture agument")
@@ -151,11 +151,9 @@ func main() {
 	if err != nil {
 		logrus.Fatal("Error creating config file")
 	}
-
 	if _, err := newConfigFile.Write(b); err != nil {
 		logrus.Fatal("Error writing config to file")
 	}
-
 }
 
 func autocomplete(c *cli.Context) {
