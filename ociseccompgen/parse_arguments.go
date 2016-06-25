@@ -10,9 +10,8 @@ import (
 
 // Arguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func parseArguments(delimArgs []string) ([]types.Arg, error) {
-
-	nilArgSlice := []types.Arg{}
+func parseArguments(delimArgs []string) (*[]types.Arg, error) {
+	nilArgSlice := new([]types.Arg)
 
 	if len(delimArgs) == 1 {
 		return nilArgSlice, nil
@@ -46,7 +45,8 @@ func parseArguments(delimArgs []string) ([]types.Arg, error) {
 			Op:       syscallOp,
 		}
 
-		argSlice := []types.Arg{argStruct}
+		argSlice := new([]types.Arg)
+		*argSlice = append(*argSlice, argStruct)
 		return argSlice, nil
 	}
 
