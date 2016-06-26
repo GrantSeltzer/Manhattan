@@ -10,10 +10,6 @@ Manhattan is a tool used to generate the seccomp json file used by OCI container
 
 `docker run -it --security-opt seccomp:Manhattan.json fedora bash`
 
-You can also specify the json file in the runc json specification like the following:
-
-TODO: `runc ...`
-
 ## Usage:
 
 Arguments consist of all lower case names of [syscalls](http://man7.org/linux/man-pages/man2/syscalls.2.html). Multiple ones can be passed by using a `,` separated list.
