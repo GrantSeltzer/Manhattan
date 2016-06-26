@@ -78,7 +78,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:        "default, d",
-			Value:       "errno",
+			Value:       "allow",
 			Usage:       "Set the default action for syscalls not specified",
 			Destination: &defaultAction,
 		},
