@@ -36,17 +36,10 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 			return err
 		}
 
-		newSyscall := newSyscallStruct(delimArgs[0], correctedAction, argSlice)
-
-		var sysCallAlreadySpecified bool
-		for _, syscall := range config.Syscalls {
-			sysCallAlreadySpecified = compareSyscalls(&newSyscall, &syscall)
-		}
-
-		if !sysCallAlreadySpecified {
-			config.Syscalls = append(config.Syscalls, newSyscall)
-		}
+		newSyscall := newSyscallStruct(delimArgs[0], correctedAction, *argSlice)
+		config.Syscalls = append(config.Syscalls, newSyscall)
 	}
+
 	return nil
 }
 
