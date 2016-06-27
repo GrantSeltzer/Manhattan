@@ -38,11 +38,13 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 
 `--name` (`-n`) specifies the name of the output file. The default is the current timestamp in the current directory.
 
+`--name-force` is the same as `--name` except it will overwrite an existing file if it's specified 
+
 ### Library
 
 Simply run `go get github.com/grantseltzer/manhattan/ociseccompgen` and import it in your go project.
 
-Documentation for use as a library coming soon. 
+Documentation for use as a library coming soon.
 
 
 ## Example usages:

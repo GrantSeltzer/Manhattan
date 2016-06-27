@@ -29,6 +29,7 @@ func main() {
 		defaultAction string
 		arch          string
 		name          string
+		nameforce     string
 	)
 	app := cli.NewApp()
 	app.Name = "manhattan"
@@ -94,6 +95,12 @@ func main() {
 			Usage:       "Set name of output file",
 			Destination: &name,
 		},
+		cli.StringFlag{
+			Name:        "name-force",
+			Value:       "not-specified",
+			Usage:       "Set name of output file, force write",
+			Destination: &nameforce,
+		},
 	}
 	app.Version = version
 	app.EnableBashCompletion = true
@@ -145,6 +152,14 @@ func main() {
 	b, err := json.MarshalIndent(SeccompProfile, "", "    ")
 	if err != nil {
 		logrus.Fatal("Error creating Seccomp Profile")
+	}
+
+	if _, erro := os.Stat(name); erro == nil && nameforce == "not-specified" {
+		logrus.Fatal("File destination already exists. Use --name-force to overwrite. ", name)
+	}
+
+	if nameforce != "not-specified" {
+		name = nameforce
 	}
 
 	newConfigFile, err := os.Create(name)
