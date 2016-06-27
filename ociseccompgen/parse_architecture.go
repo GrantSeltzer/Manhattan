@@ -11,13 +11,7 @@ import (
 // and updates the Seccomp config accordingly
 func ParseArchitectureFlag(architectures string, config *types.Seccomp) error {
 
-	var architectureArgs []string
-
-	if strings.Contains(architectures, ",") {
-		architectureArgs = strings.Split(architectures, ",")
-	} else {
-		architectureArgs = append(architectureArgs, architectures)
-	}
+	architectureArgs := strings.Split(architectures, ",")
 
 	var arches []types.Arch
 	for _, arg := range architectureArgs {

@@ -90,17 +90,11 @@ func decideCourseOfAction(newSyscall *types.Syscall, syscalls []types.Syscall) (
 
 func hasArguments(config *types.Syscall) bool {
 	nilSyscall := new(types.Syscall)
-	if sameArgs(nilSyscall, config) {
-		return false
-	}
-	return true
+	return !sameArgs(nilSyscall, config)
 }
 
 func identical(config1, config2 *types.Syscall) bool {
-	if reflect.DeepEqual(config1, config2) {
-		return true
-	}
-	return false
+	return reflect.DeepEqual(config1, config2)
 }
 
 func identicalExceptAction(config1, config2 *types.Syscall) bool {
@@ -108,10 +102,7 @@ func identicalExceptAction(config1, config2 *types.Syscall) bool {
 	sameAction := sameAction(config1, config2)
 	sameArgs := sameArgs(config1, config2)
 
-	if samename && !sameAction && sameArgs {
-		return true
-	}
-	return false
+	return samename && !sameAction && sameArgs
 }
 
 func identicalExceptArgs(config1, config2 *types.Syscall) bool {
@@ -119,69 +110,36 @@ func identicalExceptArgs(config1, config2 *types.Syscall) bool {
 	sameAction := sameAction(config1, config2)
 	sameArgs := sameArgs(config1, config2)
 
-	if samename && sameAction && !sameArgs {
-		return true
-	}
-	return false
+	return samename && sameAction && !sameArgs
 }
 
 func sameName(config1, config2 *types.Syscall) bool {
-	if config1.Name == config2.Name {
-		return true
-	}
-	return false
+	return config1.Name == config2.Name
 }
 
 func sameAction(config1, config2 *types.Syscall) bool {
-	if config1.Action == config2.Action {
-		return true
-	}
-	return false
+	return config1.Action == config2.Action
 }
 
 func sameArgs(config1, config2 *types.Syscall) bool {
-	if reflect.DeepEqual(config1.Args, config2.Args) {
-		return true
-	}
-	return false
+	return reflect.DeepEqual(config1.Args, config2.Args)
 }
 
 func bothHaveArgs(config1, config2 *types.Syscall) bool {
-	conf1 := hasArguments(config1)
-	conf2 := hasArguments(config2)
-
-	if conf1 && conf2 {
-		return true
-	}
-	return false
+	return hasArguments(config1) && hasArguments(config2)
 }
 
 func onlyOneHasArgs(config1, config2 *types.Syscall) bool {
 	conf1 := hasArguments(config1)
 	conf2 := hasArguments(config2)
 
-	if (conf1 && !conf2) || (!conf1 && conf2) {
-		return true
-	}
-	return false
+	return (conf1 && !conf2) || (!conf1 && conf2)
 }
 
 func neitherHasArgs(config1, config2 *types.Syscall) bool {
-	conf1 := hasArguments(config1)
-	conf2 := hasArguments(config2)
-
-	if !conf1 && !conf2 {
-		return true
-	}
-	return false
+	return !hasArguments(config1) && !hasArguments(config2)
 }
 
 func firstParamOnlyHasArgs(config1, config2 *types.Syscall) bool {
-	conf1 := hasArguments(config1)
-	conf2 := hasArguments(config2)
-
-	if !conf1 && conf2 {
-		return true
-	}
-	return false
+	return !hasArguments(config1) && hasArguments(config2)
 }

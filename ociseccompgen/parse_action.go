@@ -22,7 +22,6 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 
 	correctedAction, err := parseAction(action)
 	if err != nil {
-		fmt.Println(1)
 		return err
 	}
 
@@ -35,7 +34,6 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 		delimArgs := strings.Split(syscallArg, ":")
 		argSlice, err := parseArguments(delimArgs)
 		if err != nil {
-			fmt.Println(2)
 			return err
 		}
 
@@ -45,7 +43,6 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 			fmt.Println(err)
 			return err
 		}
-		fmt.Println("Descision: ", descison)
 		delimDescison := strings.Split(descison, ":")
 
 		if delimDescison[0] == "nothing" {
@@ -57,10 +54,8 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 		}
 
 		if delimDescison[0] == "overwrite" {
-			fmt.Println(delimDescison)
 			indexForOverwrite, err := strconv.ParseInt(delimDescison[1], 10, 32)
 			if err != nil {
-				fmt.Println(4)
 				return err
 			}
 			config.Syscalls[indexForOverwrite] = newSyscall
