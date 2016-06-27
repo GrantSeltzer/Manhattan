@@ -1,29 +1,22 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/grantseltzer/Manhattan/parse"
-
-	"github.com/docker/engine-api/types"
+	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func TestParseArguments(t *testing.T) {
 
+	x := seccompProfileForTestingPurposes()
 	syscall := types.Syscall{
 		Name:   "clone",
 		Action: types.ActErrno,
 	}
 
-	delimArgs := []string{
-		"clone",
-		"1",
-		"2",
-		"3",
-		"NE",
-	}
-
-	err := parse.Arguments(delimArgs, &syscall)
+	err := parse.ParseSyscallFlag("errno", "clone:1:2:3:NE", &x)
 	if err != nil {
 		t.Error("Parsing arugments returned an error ", err)
 	}
@@ -35,8 +28,7 @@ func TestParseArguments(t *testing.T) {
 		Op:       types.OpNotEqual,
 	}
 
-	if *syscall.Args[0] != ArgStruct {
-		t.Error("Arguments incorrectly parsed.", *syscall.Args[0], ArgStruct)
+	if !reflect.DeepEqual(x.Syscalls[0], ArgStruct) {
+		t.Error("Arguments incorrectly parsed.", syscall.Args[0], ArgStruct)
 	}
-
 }

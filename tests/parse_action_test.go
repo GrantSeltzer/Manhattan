@@ -3,19 +3,19 @@ package main
 import (
 	"testing"
 
-	"github.com/grantseltzer/Manhattan/parse"
+	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func seccompProfileForTestingPurposes() types.Seccomp {
-	var syses []*types.Syscall
+	syses := new([]types.Syscall)
 
 	sys := types.Syscall{
 		Name:   "clone",
 		Action: types.ActTrace,
 	}
-	syses = append(syses, &sys)
+	*syses = append(*syses, sys)
 
 	var arches []types.Arch
 	arches = append(arches, types.ArchMIPS)
@@ -23,14 +23,13 @@ func seccompProfileForTestingPurposes() types.Seccomp {
 	config := types.Seccomp{
 		DefaultAction: types.ActAllow,
 		Architectures: arches,
-		Syscalls:      syses,
+		Syscalls:      *syses,
 	}
 
 	return config
 }
 
-func TestParseSysCallFlag(t *testing.T) {
-
+func TestParseSysCallFlagOne(t *testing.T) {
 	config := seccompProfileForTestingPurposes()
 
 	actions := map[string]types.Action{
@@ -42,15 +41,12 @@ func TestParseSysCallFlag(t *testing.T) {
 	}
 
 	for k, v := range actions {
-		err := parse.SysCallFlag(k, "clone", &config)
+		err := parse.ParseSyscallFlag(k, "clone", &config)
 		if err != nil {
 			t.Error("Parsing syscall flag returned an error ", err)
 		}
-
-		for _, syscall := range config.Syscalls {
-			if syscall.Action != v {
-				t.Error("parseSysCallFlag returned wrong output ", syscall.Action, v)
-			}
+		if config.Syscalls[0].Action != v && config.DefaultAction != v {
+			t.Error("parseSysCallFlag returned wrong output ", config.Syscalls[0].Action, v)
 		}
 	}
 }
