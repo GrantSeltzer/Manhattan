@@ -2,6 +2,7 @@ package ociseccompgen
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Sirupsen/logrus"
@@ -21,6 +22,7 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 
 	correctedAction, err := parseAction(action)
 	if err != nil {
+		fmt.Println(1)
 		return err
 	}
 
@@ -33,13 +35,37 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 		delimArgs := strings.Split(syscallArg, ":")
 		argSlice, err := parseArguments(delimArgs)
 		if err != nil {
+			fmt.Println(2)
 			return err
 		}
 
 		newSyscall := newSyscallStruct(delimArgs[0], correctedAction, *argSlice)
-		config.Syscalls = append(config.Syscalls, newSyscall)
-	}
+		descison, err := decideCourseOfAction(&newSyscall, config.Syscalls)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		fmt.Println("Descision: ", descison)
+		delimDescison := strings.Split(descison, ":")
 
+		if delimDescison[0] == "nothing" {
+			logrus.Info("No action taken: ", newSyscall)
+		}
+
+		if delimDescison[0] == "append" {
+			config.Syscalls = append(config.Syscalls, newSyscall)
+		}
+
+		if delimDescison[0] == "overwrite" {
+			fmt.Println(delimDescison)
+			indexForOverwrite, err := strconv.ParseInt(delimDescison[1], 10, 32)
+			if err != nil {
+				fmt.Println(4)
+				return err
+			}
+			config.Syscalls[indexForOverwrite] = newSyscall
+		}
+	}
 	return nil
 }
 
