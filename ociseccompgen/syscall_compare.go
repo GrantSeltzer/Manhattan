@@ -15,9 +15,6 @@ what action should be taken for new syscalls.
 See github.com/grantseltzer/manhattan/Resources/Logic.png
 for a flowchart and explanation
 ********************************************************/
-const (
-	appd = "append"
-)
 
 func decideCourseOfAction(newSyscall *types.Syscall, syscalls []types.Syscall) (string, error) {
 	ruleForSyscallAlreadyExists := false
