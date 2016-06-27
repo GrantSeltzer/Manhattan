@@ -1,6 +1,6 @@
 # Manhattan
 
-A CLI tool for creating OCI seccomp json configurations.
+A CLI tool/library for creating OCI seccomp json configurations.
 
 #### [Why?](https://github.com/docker/docker/blob/master/docs/security/seccomp.md)
 
@@ -37,6 +37,13 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 `--arch` (`-l`)specifies supported [architectures](https://github.com/opencontainers/runc/blob/master/libcontainer/seccomp/config.go#L27-L44).
 
 `--name` (`-n`) specifies the name of the output file. The default is the current timestamp in the current directory.
+
+### Library
+
+Simply run `go get github.com/grantseltzer/manhattan/ociseccompgen` and import it in your go project.
+
+Documentation for use as a library coming soon. 
+
 
 ## Example usages:
 `manhattan --kill accept --name ~/jsonfiles/SeccompConfig`
