@@ -38,7 +38,7 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 
 `--name` (`-n`) specifies the name of the output file. The default is the current timestamp in the current directory.
 
-`--name-force` is the same as `--name` except it will overwrite an existing file if it's specified 
+`--name-force` is the same as `--name` except it will overwrite an existing file if it's specified
 
 ### Library
 
@@ -50,9 +50,13 @@ Documentation for use as a library coming soon.
 ## Example usages:
 `manhattan --kill accept --name ~/jsonfiles/SeccompConfig`
 
+`manhattan --input foo.bar --name-force foo.bar --kill clone:0:1:2:NE,getcwd`
+
 `manhattan --kill=accept` , `manhattan --kill:accept` and `manattan --kill accept` are all equivalent
 
 `manhattan --errno write,read --allow fstat`
+
+`manhattan --remove clone`
 
 `manhattan --default kill --remove clone`
 
