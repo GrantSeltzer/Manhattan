@@ -34,40 +34,28 @@ func ParseArchitectureFlag(architectures string, config *types.Seccomp) error {
 }
 
 func parseArch(arch string) (types.Arch, error) {
-	switch arch {
-	case "x86":
-		return types.ArchX86, nil
-	case "amd64":
-		return types.ArchX86_64, nil
-	case "x32":
-		return types.ArchX32, nil
-	case "arm":
-		return types.ArchARM, nil
-	case "arm64":
-		return types.ArchAARCH64, nil
-	case "mips":
-		return types.ArchMIPS, nil
-	case "mips64":
-		return types.ArchMIPS64, nil
-	case "mips64n32":
-		return types.ArchMIPS64N32, nil
-	case "mipsel":
-		return types.ArchMIPSEL, nil
-	case "mipsel64":
-		return types.ArchMIPSEL64, nil
-	case "mipsel64n32":
-		return types.ArchMIPSEL64N32, nil
-	case "ppc":
-		return types.ArchPPC, nil
-	case "ppc64":
-		return types.ArchPPC64, nil
-	case "ppc64le":
-		return types.ArchPPC64LE, nil
-	case "s390":
-		return types.ArchS390, nil
-	case "s390x":
-		return types.ArchS390X, nil
-	default:
-		return types.ArchMIPS, fmt.Errorf("Unrecognized architecutre: %s", arch)
+	arches := map[string]types.Arch{
+		"x86":         types.ArchX86,
+		"amd64":       types.ArchX86_64,
+		"x32":         types.ArchX32,
+		"arm":         types.ArchARM,
+		"arm64":       types.ArchAARCH64,
+		"mips":        types.ArchMIPS,
+		"mips64":      types.ArchMIPS64,
+		"mips64n32":   types.ArchMIPS64N32,
+		"mipsel":      types.ArchMIPSEL,
+		"mipsel64":    types.ArchMIPSEL64,
+		"mipsel64n32": types.ArchMIPSEL64N32,
+		"ppc":         types.ArchPPC,
+		"ppc64":       types.ArchPPC64,
+		"ppc64le":     types.ArchPPC64LE,
+		"s390":        types.ArchS390,
+		"s390x":       types.ArchS390X,
 	}
+	for k, v := range arches {
+		if arch == k {
+			return v, nil
+		}
+	}
+	return types.ArchMIPS, fmt.Errorf("Unrecognized architecutre: %s", arch)
 }

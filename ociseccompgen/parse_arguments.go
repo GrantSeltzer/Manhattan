@@ -54,22 +54,20 @@ func parseArguments(delimArgs []string) (*[]types.Arg, error) {
 }
 
 func parseOperator(operator string) (types.Operator, error) {
-	switch operator {
-	case "NE":
-		return types.OpNotEqual, nil
-	case "LT":
-		return types.OpLessThan, nil
-	case "LE":
-		return types.OpLessEqual, nil
-	case "EQ":
-		return types.OpEqualTo, nil
-	case "GE":
-		return types.OpGreaterEqual, nil
-	case "GT":
-		return types.OpGreaterThan, nil
-	case "ME":
-		return types.OpMaskedEqual, nil
-	default:
-		return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
+
+	operators := map[string]types.Operator{
+		"NE": types.OpNotEqual,
+		"LT": types.OpLessThan,
+		"LE": types.OpLessEqual,
+		"EQ": types.OpEqualTo,
+		"GE": types.OpGreaterEqual,
+		"GT": types.OpGreaterThan,
+		"ME": types.OpMaskedEqual,
 	}
+	for k, v := range operators {
+		if operator == k {
+			return v, nil
+		}
+	}
+	return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
 }
