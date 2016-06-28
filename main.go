@@ -118,44 +118,60 @@ func main() {
 		fmt.Println("[*] Creating new Profile")
 	} else {
 		jsonParser := json.NewDecoder(configFile)
-		if jsonParser.Decode(&SeccompProfile) != nil {
-			logrus.Fatal("Error parsing Configuration File")
+		err = jsonParser.Decode(&SeccompProfile)
+		if err != nil {
+			logrus.Fatal("Error parsing Configuration File", err)
 		}
 		defer configFile.Close()
 	}
 
-	if seccomp.DefaultAction(defaultAction, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing default action argument")
+	err = seccomp.DefaultAction(defaultAction, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing default action argument", err)
 	}
-	if seccomp.ParseSyscallFlag("kill", kill, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing kill argument")
+
+	err = seccomp.ParseSyscallFlag("kill", kill, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing kill argument", err)
 	}
-	if seccomp.ParseSyscallFlag("trap", trap, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing trap argument")
+
+	err = seccomp.ParseSyscallFlag("trap", trap, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing trap argument", err)
 	}
-	if seccomp.ParseSyscallFlag("errno", errno, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing errno argument")
+
+	err = seccomp.ParseSyscallFlag("errno", errno, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing errno argument", err)
 	}
-	if seccomp.ParseSyscallFlag("trace", trace, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing trace argument")
+
+	err = seccomp.ParseSyscallFlag("trace", trace, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing trace argument", err)
 	}
-	if seccomp.ParseSyscallFlag("allow", allow, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing allow argument")
+
+	err = seccomp.ParseSyscallFlag("allow", allow, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing allow argument", err)
 	}
-	if seccomp.ParseArchitectureFlag(arch, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing architecture agument")
+
+	err = seccomp.ParseArchitectureFlag(arch, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing architecture agument", err)
 	}
-	if seccomp.RemoveAction(remove, &SeccompProfile) != nil {
-		logrus.Fatal("Error parsing remove action argument")
+
+	err = seccomp.RemoveAction(remove, &SeccompProfile)
+	if err != nil {
+		logrus.Fatal("Error parsing remove action argument", err)
 	}
 
 	b, err := json.MarshalIndent(SeccompProfile, "", "    ")
 	if err != nil {
-		logrus.Fatal("Error creating Seccomp Profile")
+		logrus.Fatal("Error creating Seccomp Profile", err)
 	}
 
 	if _, erro := os.Stat(name); erro == nil && nameforce == "not-specified" {
-		logrus.Fatal("File destination already exists. Use --name-force to overwrite. ", name)
+		logrus.Fatal("File destination already exists. Use --name-force to overwrite. ", name, erro)
 	}
 
 	if nameforce != "not-specified" {
@@ -164,10 +180,10 @@ func main() {
 
 	newConfigFile, err := os.Create(name)
 	if err != nil {
-		logrus.Fatal("Error creating config file")
+		logrus.Fatal("Error creating config file", err)
 	}
 	if _, err := newConfigFile.Write(b); err != nil {
-		logrus.Fatal("Error writing config to file")
+		logrus.Fatal("Error writing config to file", err)
 	}
 }
 
