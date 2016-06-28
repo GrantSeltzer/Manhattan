@@ -8,7 +8,7 @@ import (
 	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
-// Arguments takes a list of arguments (delimArgs)  and a pointer to a
+// parseArguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
 func parseArguments(delimArgs []string) (*[]types.Arg, error) {
 	nilArgSlice := new([]types.Arg)

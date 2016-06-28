@@ -82,8 +82,8 @@ func parseAction(action string) (types.Action, error) {
 	return types.ActKill, fmt.Errorf("Unrecognized action: %s", action)
 }
 
-//DefaultAction simply sets the default action of the seccomp configuration
-func DefaultAction(action string, config *types.Seccomp) error {
+//ParseDefaultAction simply sets the default action of the seccomp configuration
+func ParseDefaultAction(action string, config *types.Seccomp) error {
 	defaultAction, err := parseAction(action)
 	if err != nil {
 		return err

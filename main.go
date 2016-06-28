@@ -125,7 +125,7 @@ func main() {
 		defer configFile.Close()
 	}
 
-	err = seccomp.DefaultAction(defaultAction, &SeccompProfile)
+	err = seccomp.ParseDefaultAction(defaultAction, &SeccompProfile)
 	if err != nil {
 		logrus.Fatal("Error parsing default action argument", err)
 	}
