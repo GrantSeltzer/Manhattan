@@ -1,11 +1,12 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/grantseltzer/Manhattan/parse"
+	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
 
-	"github.com/docker/engine-api/types"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func TestParseArchFlag(t *testing.T) {
@@ -31,15 +32,16 @@ func TestParseArchFlag(t *testing.T) {
 		"s390x":       types.ArchS390X,
 	}
 
+	emptyArches := []types.Arch{}
+
 	for k, v := range arches {
-		err := parse.ArchFlag(k, &config)
+		compareArches := append(emptyArches, v)
+		err := parse.ParseArchitectureFlag(k, &config)
 		if err != nil {
 			t.Error("Parsing Arch Flag returned an error")
 		}
-
-		if config.Architectures[0] != v {
-			t.Error("Architectures mismatched", config.Architectures[0], v)
+		if !reflect.DeepEqual(compareArches, config.Architectures) {
+			t.Error("Architectures mismatched", compareArches, config.Architectures)
 		}
 	}
-
 }

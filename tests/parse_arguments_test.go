@@ -10,13 +10,9 @@ import (
 
 func TestParseArguments(t *testing.T) {
 
-	x := seccompProfileForTestingPurposes()
-	syscall := types.Syscall{
-		Name:   "clone",
-		Action: types.ActErrno,
-	}
+	config := seccompProfileForTestingPurposes()
 
-	err := parse.ParseSyscallFlag("errno", "clone:1:2:3:NE", &x)
+	err := parse.ParseSyscallFlag("errno", "clone:1:2:3:NE", &config)
 	if err != nil {
 		t.Error("Parsing arugments returned an error ", err)
 	}
@@ -28,7 +24,13 @@ func TestParseArguments(t *testing.T) {
 		Op:       types.OpNotEqual,
 	}
 
-	if !reflect.DeepEqual(x.Syscalls[0], ArgStruct) {
-		t.Error("Arguments incorrectly parsed.", syscall.Args[0], ArgStruct)
+	for _, syscall := range config.Syscalls {
+		if syscall.Name == "clone" {
+			for _, argStruct := range syscall.Args {
+				if !reflect.DeepEqual(argStruct, ArgStruct) {
+					t.Error("Arguments incorrectly parsed.")
+				}
+			}
+		}
 	}
 }
