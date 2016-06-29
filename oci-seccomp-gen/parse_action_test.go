@@ -1,9 +1,7 @@
-package main
+package ociseccompgen
 
 import (
 	"testing"
-
-	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
 
 	types "github.com/opencontainers/runtime-spec/specs-go"
 )
@@ -41,7 +39,7 @@ func TestParseSysCallFlagOne(t *testing.T) {
 	}
 
 	for k, v := range actions {
-		err := parse.ParseSyscallFlag(k, "clone", &config)
+		err := ParseSyscallFlag(k, "clone", &config)
 		if err != nil {
 			t.Error("Parsing syscall flag returned an error ", err)
 		}
@@ -54,7 +52,7 @@ func TestParseSysCallFlagOne(t *testing.T) {
 func TestParseDefaultAction(t *testing.T) {
 	config := seccompProfileForTestingPurposes()
 
-	err := parse.DefaultAction("kill", &config)
+	err := ParseDefaultAction("kill", &config)
 	if err != nil {
 		t.Error("Parsing default action returned an error ", err)
 	}

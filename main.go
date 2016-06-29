@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	seccomp "github.com/grantseltzer/Manhattan/ociseccompgen"
+	seccomp "github.com/grantseltzer/Manhattan/oci-seccomp-gen"
 	types "github.com/opencontainers/runtime-spec/specs-go"
 
 	"github.com/Sirupsen/logrus"

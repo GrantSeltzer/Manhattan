@@ -1,18 +1,16 @@
-package main
+package ociseccompgen
 
 import (
 	"reflect"
 	"testing"
 
-	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
 	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func TestParseArguments(t *testing.T) {
-
 	config := seccompProfileForTestingPurposes()
 
-	err := parse.ParseSyscallFlag("errno", "clone:1:2:3:NE", &config)
+	err := ParseSyscallFlag("errno", "clone:1:2:3:NE", &config)
 	if err != nil {
 		t.Error("Parsing arugments returned an error ", err)
 	}

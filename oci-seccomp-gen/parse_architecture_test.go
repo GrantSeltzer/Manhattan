@@ -1,16 +1,13 @@
-package main
+package ociseccompgen
 
 import (
 	"reflect"
 	"testing"
 
-	parse "github.com/grantseltzer/Manhattan/ociseccompgen"
-
 	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
 func TestParseArchFlag(t *testing.T) {
-
 	config := seccompProfileForTestingPurposes()
 
 	arches := map[string]types.Arch{
@@ -36,7 +33,7 @@ func TestParseArchFlag(t *testing.T) {
 
 	for k, v := range arches {
 		compareArches := append(emptyArches, v)
-		err := parse.ParseArchitectureFlag(k, &config)
+		err := ParseArchitectureFlag(k, &config)
 		if err != nil {
 			t.Error("Parsing Arch Flag returned an error")
 		}
