@@ -3,23 +3,33 @@ package ociseccompgen
 import (
 	"os"
 	"os/user"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/Sirupsen/logrus"
 )
 
 // DefaultFullPath returns the default full path/name for output configuration files
 func DefaultFullPath() string {
-	return (parseLocation(pwd(), parseTime()))
+	return (parseLocation(pwd(), parseNameWithNumber("manhattan", 0)))
 }
 
 func parseLocation(location, name string) string {
 	return strings.TrimSuffix(location, "/") + "/" + name
 }
 
-func parseTime() string {
-	return strings.Replace(time.Now().String(), " ", "", -1)
+func parseNameWithNumber(name string, number int) string {
+	var fullName string
+	if number == 0 {
+		fullName = name + ".json"
+	} else {
+		fullName = name + strconv.Itoa(number) + ".json"
+	}
+	if _, err := os.Stat(pwd() + "/" + fullName); os.IsNotExist(err) {
+		return fullName
+	}
+	return parseNameWithNumber(name, number+1)
+
 }
 
 func userHomeDir() string {
