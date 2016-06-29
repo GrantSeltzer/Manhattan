@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"strconv"
 
-	types "github.com/opencontainers/runc/libcontainer/configs"
+	types "github.com/opencontainers/runtime-spec/specs-go"
 )
 
-// Arguments takes a list of arguments (delimArgs)  and a pointer to a
+// parseArguments takes a list of arguments (delimArgs)  and a pointer to a
 // corresponding syscall struct. It parses and fills out the argument information
-func parseArguments(delimArgs []string) ([]*types.Arg, error) {
-
-	nilArgSlice := []*types.Arg{}
+func parseArguments(delimArgs []string) (*[]types.Arg, error) {
+	nilArgSlice := new([]types.Arg)
 
 	if len(delimArgs) == 1 {
 		return nilArgSlice, nil
@@ -39,14 +38,15 @@ func parseArguments(delimArgs []string) ([]*types.Arg, error) {
 			return nilArgSlice, err
 		}
 
-		argStruct := &types.Arg{
+		argStruct := types.Arg{
 			Index:    uint(syscallIndex),
 			Value:    syscallValue,
 			ValueTwo: syscallValueTwo,
 			Op:       syscallOp,
 		}
 
-		argSlice := []*types.Arg{argStruct}
+		argSlice := new([]types.Arg)
+		*argSlice = append(*argSlice, argStruct)
 		return argSlice, nil
 	}
 
@@ -54,22 +54,20 @@ func parseArguments(delimArgs []string) ([]*types.Arg, error) {
 }
 
 func parseOperator(operator string) (types.Operator, error) {
-	switch operator {
-	case "NE":
-		return types.NotEqualTo, nil
-	case "LT":
-		return types.LessThan, nil
-	case "LE":
-		return types.LessThanOrEqualTo, nil
-	case "EQ":
-		return types.EqualTo, nil
-	case "GE":
-		return types.GreaterThanOrEqualTo, nil
-	case "GT":
-		return types.GreaterThan, nil
-	case "ME":
-		return types.MaskEqualTo, nil
-	default:
-		return types.NotEqualTo, fmt.Errorf("Unrecognized operator: %s", operator)
+
+	operators := map[string]types.Operator{
+		"NE": types.OpNotEqual,
+		"LT": types.OpLessThan,
+		"LE": types.OpLessEqual,
+		"EQ": types.OpEqualTo,
+		"GE": types.OpGreaterEqual,
+		"GT": types.OpGreaterThan,
+		"ME": types.OpMaskedEqual,
 	}
+	for k, v := range operators {
+		if operator == k {
+			return v, nil
+		}
+	}
+	return types.OpNotEqual, fmt.Errorf("Unrecognized operator: %s", operator)
 }
