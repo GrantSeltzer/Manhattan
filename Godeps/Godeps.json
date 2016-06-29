@@ -9,7 +9,7 @@
 		},
 		{
 			"ImportPath": "github.com/grantseltzer/Manhattan/oci-seccomp-gen",
-			"Rev": "72cd9e8b08f65bbee03616d95375a8fd2cc459dd"
+			"Rev": "bf11374c2ce28e7d8241eb3ae4dc38081d5a058e"
 		},
 		{
 			"ImportPath": "github.com/opencontainers/runtime-spec/specs-go",
