@@ -42,7 +42,7 @@ You can also specify [parameters](https://github.com/docker/engine-api/blob/mast
 
 ### Library
 
-Simply run `go get github.com/grantseltzer/manhattan/ociseccompgen` and import it in your go project.
+Simply run `go get github.com/grantseltzer/manhattan/oci-seccomp-gen` and import it in your go project.
 
 Documentation for use as a library coming soon.
 
