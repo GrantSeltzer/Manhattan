@@ -64,22 +64,21 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 	return nil
 }
 
+var actions = map[string]types.Action{
+	"allow": types.ActAllow,
+	"errno": types.ActErrno,
+	"kill":  types.ActKill,
+	"trace": types.ActTrace,
+	"trap":  types.ActTrap,
+}
+
 // Take passed action, return the SCMP_ACT_<ACTION> version of it
 func parseAction(action string) (types.Action, error) {
-
-	actions := map[string]types.Action{
-		"allow": types.ActAllow,
-		"errno": types.ActErrno,
-		"kill":  types.ActKill,
-		"trace": types.ActTrace,
-		"trap":  types.ActTrap,
+	a, ok := actions[action]
+	if !ok {
+		return "", fmt.Errorf("Unrecognized action: %s", action)
 	}
-	for k, v := range actions {
-		if action == k {
-			return v, nil
-		}
-	}
-	return types.ActKill, fmt.Errorf("Unrecognized action: %s", action)
+	return a, nil
 }
 
 //ParseDefaultAction simply sets the default action of the seccomp configuration

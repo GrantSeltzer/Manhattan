@@ -52,10 +52,9 @@ func parseArch(arch string) (types.Arch, error) {
 		"s390":        types.ArchS390,
 		"s390x":       types.ArchS390X,
 	}
-	for k, v := range arches {
-		if arch == k {
-			return v, nil
-		}
+	a, ok := arches[arch]
+	if !ok {
+		return "", fmt.Errorf("Unrecognized architecutre: %s", arch)
 	}
-	return types.ArchMIPS, fmt.Errorf("Unrecognized architecutre: %s", arch)
+	return a, nil
 }
