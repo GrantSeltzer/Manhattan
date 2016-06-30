@@ -36,68 +36,68 @@ func main() {
 	app.Usage = "Create seccomp json configurations for use with OCI or Docker"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:        "input, i",
+			Name:        inputOptions,
 			Value:       defaultSeccompProfile,
 			Usage:       "Specify location of base configuration file",
 			Destination: &input,
 		},
 		cli.StringFlag{
-			Name:        "kill, k",
-			Value:       "",
+			Name:        killOptions,
+			Value:       emptyString,
 			Usage:       "Respond to system call with KILL",
 			Destination: &kill,
 		},
 		cli.StringFlag{
-			Name:        "trap",
-			Value:       "",
+			Name:        trapOptions,
+			Value:       emptyString,
 			Usage:       "Respond to system call with TRAP",
 			Destination: &trap,
 		},
 		cli.StringFlag{
-			Name:        "errno, e",
-			Value:       "",
+			Name:        errnoOptions,
+			Value:       emptyString,
 			Usage:       "Respond to system call with ERRNO",
 			Destination: &errno,
 		},
 		cli.StringFlag{
-			Name:        "trace",
-			Value:       "",
+			Name:        traceOptions,
+			Value:       emptyString,
 			Usage:       "Respond to system call with TRACE",
 			Destination: &trace,
 		},
 		cli.StringFlag{
-			Name:        "allow, a",
-			Value:       "",
+			Name:        allowOptions,
+			Value:       emptyString,
 			Usage:       "Respond to system call with ALLOW",
 			Destination: &allow,
 		},
 		cli.StringFlag{
-			Name:        "remove, r",
-			Value:       "",
+			Name:        removeOptions,
+			Value:       emptyString,
 			Usage:       "Remove a syscall",
 			Destination: &remove,
 		},
 		cli.StringFlag{
-			Name:        "default, d",
-			Value:       "allow",
+			Name:        defaultOptions,
+			Value:       defaultDefault,
 			Usage:       "Set the default action for syscalls not specified",
 			Destination: &defaultAction,
 		},
 		cli.StringFlag{
-			Name:        "arch",
-			Value:       "amd64,x86,x32",
+			Name:        archOptions,
+			Value:       archDefault,
 			Usage:       "Set supported architectures",
 			Destination: &arch,
 		},
 		cli.StringFlag{
-			Name:        "name, n",
+			Name:        nameOptions,
 			Value:       seccomp.DefaultFullPath(),
 			Usage:       "Set name of output file",
 			Destination: &name,
 		},
 		cli.StringFlag{
-			Name:        "name-force",
-			Value:       "not-specified",
+			Name:        nameForceOptions,
+			Value:       nameForceDefault,
 			Usage:       "Set name of output file, force write",
 			Destination: &nameforce,
 		},
@@ -165,7 +165,7 @@ func main() {
 		logrus.Fatal("Error parsing remove action argument", err)
 	}
 
-	b, err := json.MarshalIndent(SeccompProfile, "", "    ")
+	b, err := json.MarshalIndent(SeccompProfile, emptyString, "    ")
 	if err != nil {
 		logrus.Fatal("Error creating Seccomp Profile", err)
 	}
