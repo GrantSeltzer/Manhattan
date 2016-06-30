@@ -62,4 +62,6 @@ Documentation for use as a library coming soon.
 
 `manhattan --trace clone:1:2:3:GT`
 
+`manhattan --kill clone:1:2:3:ME,getcwd:1:2:3:GE`
+
 `manhattan --arch mips,mips64,amd64`
