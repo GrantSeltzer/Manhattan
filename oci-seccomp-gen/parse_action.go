@@ -45,15 +45,15 @@ func ParseSyscallFlag(action string, arguments string, config *types.Seccomp) er
 		}
 		delimDescison := strings.Split(descison, ":")
 
-		if delimDescison[0] == "nothing" {
+		if delimDescison[0] == nothing {
 			logrus.Info("No action taken: ", newSyscall)
 		}
 
-		if delimDescison[0] == "append" {
+		if delimDescison[0] == appnd {
 			config.Syscalls = append(config.Syscalls, newSyscall)
 		}
 
-		if delimDescison[0] == "overwrite" {
+		if delimDescison[0] == overwrite {
 			indexForOverwrite, err := strconv.ParseInt(delimDescison[1], 10, 32)
 			if err != nil {
 				return err

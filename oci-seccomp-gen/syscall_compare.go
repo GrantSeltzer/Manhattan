@@ -25,18 +25,18 @@ func decideCourseOfAction(newSyscall *types.Syscall, syscalls []types.Syscall) (
 			ruleForSyscallAlreadyExists = true
 
 			if identical(newSyscall, &syscall) {
-				sliceOfDeterminedActions = append(sliceOfDeterminedActions, "nothing")
+				sliceOfDeterminedActions = append(sliceOfDeterminedActions, nothing)
 			}
 
 			if sameAction(newSyscall, &syscall) {
 				if bothHaveArgs(newSyscall, &syscall) {
-					sliceOfDeterminedActions = append(sliceOfDeterminedActions, "append")
+					sliceOfDeterminedActions = append(sliceOfDeterminedActions, appnd)
 				}
 				if onlyOneHasArgs(newSyscall, &syscall) {
 					if firstParamOnlyHasArgs(newSyscall, &syscall) {
 						sliceOfDeterminedActions = append(sliceOfDeterminedActions, "overwrite:"+strconv.Itoa(i))
 					} else {
-						sliceOfDeterminedActions = append(sliceOfDeterminedActions, "nothing")
+						sliceOfDeterminedActions = append(sliceOfDeterminedActions, nothing)
 					}
 				}
 			}
@@ -47,11 +47,11 @@ func decideCourseOfAction(newSyscall *types.Syscall, syscalls []types.Syscall) (
 						sliceOfDeterminedActions = append(sliceOfDeterminedActions, "overwrite:"+strconv.Itoa(i))
 					}
 					if !sameArgs(newSyscall, &syscall) {
-						sliceOfDeterminedActions = append(sliceOfDeterminedActions, "append")
+						sliceOfDeterminedActions = append(sliceOfDeterminedActions, appnd)
 					}
 				}
 				if onlyOneHasArgs(newSyscall, &syscall) {
-					sliceOfDeterminedActions = append(sliceOfDeterminedActions, "append")
+					sliceOfDeterminedActions = append(sliceOfDeterminedActions, appnd)
 				}
 				if neitherHasArgs(newSyscall, &syscall) {
 					sliceOfDeterminedActions = append(sliceOfDeterminedActions, "overwrite:"+strconv.Itoa(i))
@@ -61,26 +61,26 @@ func decideCourseOfAction(newSyscall *types.Syscall, syscalls []types.Syscall) (
 	}
 
 	if !ruleForSyscallAlreadyExists {
-		sliceOfDeterminedActions = append(sliceOfDeterminedActions, "append")
+		sliceOfDeterminedActions = append(sliceOfDeterminedActions, appnd)
 	}
 
 	// Nothing has highest priority
 	for _, determinedAction := range sliceOfDeterminedActions {
-		if determinedAction == "nothing" {
+		if determinedAction == nothing {
 			return determinedAction, nil
 		}
 	}
 
 	// Overwrite has second highest priority
 	for _, determinedAction := range sliceOfDeterminedActions {
-		if strings.Contains(determinedAction, "overwrite") {
+		if strings.Contains(determinedAction, overwrite) {
 			return determinedAction, nil
 		}
 	}
 
 	// Append has the lowest priority
 	for _, determinedAction := range sliceOfDeterminedActions {
-		if determinedAction == "append" {
+		if determinedAction == appnd {
 			return determinedAction, nil
 		}
 	}
