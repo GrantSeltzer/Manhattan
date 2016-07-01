@@ -15,4 +15,4 @@ install-binary:
 clean:
 	rm -f manhattan
 test:
-	cd tests && go test
+	go test oci-seccomp-gen/*
