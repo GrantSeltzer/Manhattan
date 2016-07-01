@@ -83,6 +83,11 @@ func parseAction(action string) (types.Action, error) {
 
 //ParseDefaultAction simply sets the default action of the seccomp configuration
 func ParseDefaultAction(action string, config *types.Seccomp) error {
+
+	if action == "" {
+		return nil
+	}
+
 	defaultAction, err := parseAction(action)
 	if err != nil {
 		return err
