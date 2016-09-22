@@ -2,6 +2,8 @@
 
 A CLI tool/library for creating OCI seccomp json configurations.
 
+Warning: At the moment, Manhattan does not support the new docker seccomp format
+
 #### [Why?](https://github.com/docker/docker/blob/master/docs/security/seccomp.md)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/grantseltzer/manhattan)](https://goreportcard.com/report/github.com/grantseltzer/manhattan)
