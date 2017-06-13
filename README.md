@@ -1,4 +1,6 @@
-# Manhattan
+# Manhattan - Deprecated
+
+### The core packages of this tool have been moved over to [opencontainers/runtime-tools](https://github.com/opencontainers/runtime-tools) which supports the latest version of the OCI runtime-spec. See documentation there.
 
 A CLI tool/library for creating OCI seccomp json configurations.
 
